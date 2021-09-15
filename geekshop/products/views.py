@@ -10,4 +10,12 @@ def index(request):
 
 
 def products(request):
-    return render(request, 'products/products.html')
+    context = {
+        'slides': [
+            'vendor/img/slides/slide-1.jpg',
+            'vendor/img/slides/slide-2.jpg',
+            'vendor/img/slides/slide-3.jpg'
+        ]
+    }
+
+    return render(request, 'products/products.html', context)
