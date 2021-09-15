@@ -14,7 +14,8 @@ def products(request):
         'slides': [
             'vendor/img/slides/slide-1.jpg',
             'vendor/img/slides/slide-2.jpg',
-            'vendor/img/slides/slide-3.jpg'
+            'vendor/img/slides/slide-3.jpg',
+            'vendor/img/slides/slide-4.jpg',
         ]
     }
 
