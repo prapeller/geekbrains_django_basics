@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'djmoney',
     'products',
 ]
 
@@ -129,3 +130,15 @@ STATICFILES_DIRS = (BASE_DIR / 'static', )
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+import moneyed
+
+RUB = moneyed.add_currency(
+    code='RUB',
+    numeric='643',
+    name='Рубль',
+    countries=('RUSSIA', )
+)
+
+CURRENCIES = ('USD', 'EUR', 'RUB')
+CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('RUB', 'RUB ₽')]
