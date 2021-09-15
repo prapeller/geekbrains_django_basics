@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>{{ title|title }} </title>
+</head>
+<body>
+
+<h1>{{ header }}</h1>
+<p>Hello, {{ user }}!</p>
+<p>Its {{ time|time:"H:i" }} now!</p>
+
+<br>
+
+{% for product in products %}
+	<div>
+		<p>{{ product.name }}</p>
+		<p>{{ product.price }}</p>
+		<br>
+	</div>
+{% endfor %}
+
+{% if promo_products %}
+	{% for product in promo_products %}
+		<div style="color: red">
+			<p>{{ product.name }}</p>
+			<p>{{ product.price }}</p>
+			<br>
+		</div>
+	{% endfor %}
+{% endif %}
+
+
+</body>
+</html>
+
