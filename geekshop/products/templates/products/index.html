@@ -1,6 +1,7 @@
 {% extends 'products/base.html' %}
 {% load static %}
 {% get_static_prefix as STATIC_PREFIX %}
+{% load l10n %}
 
 {% block title %}
     <title>GeekShop</title>
@@ -16,9 +17,10 @@
         <div class="row">
             <div class="col-lg-6">
                 <h1 class="mt-5">GeekShop Store</h1>
-                <p>
+	            <p> ТОЛЬКО СЕГОДНЯ! {% now 'M, d, H:m' %}</p>
+	            <p>
                     Новые образы и лучшие бренды на GeekShop Store.
-                    Бесплатная доставка по всему миру! Аутлет: до -70% Собственный бренд. -20% новым покупателям.
+	                Бесплатная доставка по всему миру! Аутлет: до -70% Собственный бренд. -20% новым покупателям.
                 </p>
                 <button id="start-purchase-btn" type="button" class="btn btn-lg">
                     <a id="start-purchase-link" href="{% url 'products:main' %}">
