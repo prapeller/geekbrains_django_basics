@@ -46,10 +46,7 @@
 					</ol>
 					<div class="carousel-inner" role="listbox">
 						{% for slide in slides %}
-							<div class="carousel-item
-							{% if slides|get_index:slide == 0 %}
-							active
-							{% endif %}">
+							<div class="carousel-item {% if slides|get_index:slide == 0 %}active{% endif %}">
 								<img class="d-block img-fluid" src="{{ STATIC_PREFIX }}{{ slide }}" alt="{{ slide }}">
 							</div>
 						{% endfor %}
@@ -77,9 +74,11 @@
 									     alt="">
 								</a>
 								<div class="card-body">
-									<h4 class="card-title"><a href="#">{{ product.card_title }}</a></h4>
-									<h5>{{  product.price }}</h5>
-									<p class="card-text">{{ product.card_text}}
+									<h4 class="card-title">
+										<a href="#">{{ product.card_title }}</a>
+									</h4>
+									<h5>{{ product.price }}</h5>
+									<p class="card-text">{{ product.card_text }}
 									</p>
 								</div>
 
