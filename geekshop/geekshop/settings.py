@@ -141,4 +141,5 @@ RUB = moneyed.add_currency(
 )
 
 CURRENCIES = ('USD', 'EUR', 'RUB')
-CURRENCY_CHOICES = [('USD', 'USD $'), ('EUR', 'EUR €'), ('RUB', 'RUB ₽')]
+CURRENCY_CHOICES = [('USD', '$'), ('EUR', '€'), ('RUB', '₽')]
+CURRENCY_CODE_MAX_LENGTH = 3

@@ -17,17 +17,15 @@ def index(request):
 
 
 def products(request):
-    with open(os.path.join(app_path, 'fixtu/slides.json')) as file:
-        data = json.load(file)
-        slides_paths = data['slides']
+    with open(os.path.join(app_path, 'fixtures/slides.json')) as file:
+        slides_paths = json.load(file)
 
-    with open(os.path.join(app_path, 'fixtu/products_description.json'), encoding='utf-8') as file:
-        data = json.load(file)
-        products_description = data['description']
+    with open(os.path.join(app_path, 'fixtures/products_description.json'), encoding='utf-8') as file:
+        products = json.load(file)
 
     context = {
         'slides': slides_paths,
-        'products': products_description
+        'products': products
     }
 
     return render(request, 'products/products.html', context)
