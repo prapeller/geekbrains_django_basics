@@ -124,7 +124,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (BASE_DIR / 'static', )
+STATICFILES_DIRS = (BASE_DIR / 'media/product_images', )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -143,3 +143,6 @@ RUB = moneyed.add_currency(
 CURRENCIES = ('USD', 'EUR', 'RUB')
 CURRENCY_CHOICES = [('USD', '$'), ('EUR', '€'), ('RUB', '₽')]
 CURRENCY_CODE_MAX_LENGTH = 3
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

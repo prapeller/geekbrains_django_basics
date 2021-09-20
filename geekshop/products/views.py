@@ -7,6 +7,7 @@ from django.shortcuts import render
 import json
 import os
 import pathlib
+from products.models import Product, ProductCategory
 
 app_path = pathlib.Path(__file__).resolve().parent
 
@@ -25,7 +26,7 @@ def products(request):
 
     context = {
         'slides': slides_paths,
-        'products': products
+        'products': Product.objects.all()
     }
 
     return render(request, 'products/products.html', context)

@@ -69,16 +69,14 @@
 						<div class="col-lg-4 col-md-6 mb-4">
 							<div class="card h-100">
 								<a href="#">
-									<img class="card-img-top"
-									     src="{{ STATIC_PREFIX }}{{ product.image }}"
-									     alt="">
+									<img class="card-img-top" src="/media/{{ product.image }}" alt={{ product.image }}>
 								</a>
 								<div class="card-body">
 									<h4 class="card-title">
-										<a href="#">{{ product.card_title }}</a>
+										<a href="#">{{ product.name }}</a>
 									</h4>
 									<h5>{{ product.price }}</h5>
-									<p class="card-text">{{ product.card_text }}
+									<p class="card-text">{{ product.description }}
 									</p>
 								</div>
 
