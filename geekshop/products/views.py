@@ -21,12 +21,10 @@ def products(request):
     with open(os.path.join(app_path, 'fixtures/slides.json')) as file:
         slides_paths = json.load(file)
 
-    with open(os.path.join(app_path, 'fixtures/products_description.json'), encoding='utf-8') as file:
-        products = json.load(file)
-
     context = {
         'slides': slides_paths,
-        'products': Product.objects.all()
+        'products': Product.objects.all(),
+        'categories': ProductCategory.objects.all()
     }
 
     return render(request, 'products/products.html', context)
