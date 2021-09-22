@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'djmoney',
     'products',
+    'users'
 ]
 
 MIDDLEWARE = [
@@ -139,3 +140,5 @@ CURRENCY_CODE_MAX_LENGTH = 3
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+AUTH_USER_MODEL = 'users.User'
