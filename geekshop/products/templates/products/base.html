@@ -36,15 +36,24 @@
 		<div class="collapse navbar-collapse" id="navbarResponsive">
 			<ul class="navbar-nav ml-auto">
 				<li class="nav-item active">
-<!--					<a class="nav-link" href="{% url 'products:main' %}">Каталог</a>-->
 					<a class="nav-link" href="{% url 'products_app:main' %}">Каталог</a>
 				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="#"><i class="fas fa-shopping-bag"></i></a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" href="{% url 'users_app:login' %}">Войти <i class="fas fa-sign-in-alt"></i></a>
-				</li>
+
+				{% if not user.is_authenticated %}
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'users_app:login' %}">Войти <i class="fas fa-sign-in-alt"></i>
+						</a>
+					</li>
+
+				{% else %}
+					<li class="nav-item">
+						<a class="nav-link active" href="{{ user }}">User <i class="fas fa-user-circle"></i></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="{% url 'users_app:logout' %}">Выйти <i
+								class="fas fa-sign-out-alt"></i></a>
+					</li>
+				{% endif %}
 			</ul>
 		</div>
 	</div>
