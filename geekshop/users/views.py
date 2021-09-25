@@ -8,7 +8,6 @@ from users.forms import UserLoginForm, UserRegisterForm
 # Create your views here.
 def login(request):
     form = UserLoginForm()
-    errors = {}
 
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
@@ -20,20 +19,16 @@ def login(request):
             if user and user.is_active:
                 auth.login(request, user)
             return HttpResponseRedirect(reverse('index'))
-        else:
-            errors = form.errors.as_data()
 
     context = {
         'title': 'Geekshop login',
         'form': form,
-        'errors': errors
     }
     return render(request, 'users/login.html', context)
 
 
 def register(request):
     form = UserRegisterForm()
-    errors = {}
 
     if request.method == 'POST':
         form = UserRegisterForm(data=request.POST)
@@ -41,13 +36,10 @@ def register(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('users_app:login'))
-        else:
-            errors = form.errors.as_data()
 
     context = {
         'title': 'Geekshop register',
         'form': form,
-        'errors': errors
     }
     return render(request, 'users/register.html', context)
 

@@ -43,11 +43,11 @@ class UserRegisterForm(UserCreationForm):
 
     def clean(self):
         cleaned_data = super(self.__class__, self).clean()
-        if 'pupkin' or 'vasya' in (
-                self.cleaned_data.get('username').lower(),
+        fields_str = str(
+                (self.cleaned_data.get('username').lower(),
                 self.cleaned_data.get('email').lower(),
                 self.cleaned_data.get('first_name').lower(),
-                self.cleaned_data.get('last_name').lower()
-        ):
-            raise forms.ValidationError("VASYA PUPKIN in da house!!! Get rid of that motherf...er!!!")
+                self.cleaned_data.get('last_name').lower()))
+        if 'pupkin' in fields_str:
+            raise forms.ValidationError('PUPKIN in da house!!!')
         return cleaned_data
