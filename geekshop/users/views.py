@@ -3,6 +3,8 @@ from django.contrib import auth, messages
 from django.urls import reverse
 
 from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from basket.models import Basket
+from basket.views import get_total_sum, get_total_quantity
 
 
 # Create your views here.
@@ -52,6 +54,10 @@ def logout(request):
 
 def profile(request):
     form = UserProfileForm(instance=request.user)
+    basket_products = Basket.objects.filter(user=request.user)
+
+    total_sum = get_total_sum(basket_products)
+    total_quantity = get_total_quantity(basket_products)
 
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
@@ -61,6 +67,9 @@ def profile(request):
 
     context = {
         'title': 'Geekshop - Profile',
-        'form': form
+        'form': form,
+        'basket_products': basket_products,
+        'total_sum': total_sum,
+        'total_quantity': total_quantity,
     }
     return render(request, 'users/profile.html', context)
