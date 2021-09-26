@@ -14,7 +14,8 @@ app_path = pathlib.Path(__file__).resolve().parent
 
 # Create your views here.
 def index(request):
-    return render(request, 'products/index.html')
+    context = {'title': 'Geekshop - main'}
+    return render(request, 'products/index.html', context)
 
 
 def products(request):
@@ -22,6 +23,7 @@ def products(request):
         slides_paths = json.load(file)
 
     context = {
+        'title': 'Geekshop - catalog',
         'slides': slides_paths,
         'products': Product.objects.all(),
         'categories': ProductCategory.objects.all()
