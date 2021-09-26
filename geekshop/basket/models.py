@@ -2,6 +2,7 @@ from django.db import models
 from users.models import User
 from products.models import Product
 
+
 # Create your models here.
 
 
@@ -14,3 +15,6 @@ class Basket(models.Model):
 
     def __str__(self):
         return f'Basket for {self.user} | Product {self.product}'
+
+    def get_subtotal(self):
+        return self.product.price * self.quantity
