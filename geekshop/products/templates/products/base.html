@@ -11,8 +11,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	{% block title %}
-	{% endblock %}
+	<title>{{title|title}}</title>
 
 	<!-- Bootstrap core CSS -->
 	<link href="{{ STATIC_PREFIX }}vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -47,7 +46,8 @@
 
 				{% else %}
 					<li class="nav-item">
-						<a class="nav-link active" href="{{ user }}">User <i class="fas fa-user-circle"></i></a>
+						<a class="nav-link active" href="{% url 'users_app:profile' %} ">User <i
+								class="fas fa-user-circle"></i></a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" href="{% url 'users_app:logout' %}">Выйти <i
@@ -58,6 +58,29 @@
 		</div>
 	</div>
 </nav>
+
+{#Messages#}
+{% if form.errors or messages %}
+	<div class="alert {% if messages %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show"
+	     role="alert"
+	     style="margin-top: 50px;">
+		<p><strong>Message!</strong></p>
+		{% for field, error in form.errors.items %}
+			{% if field == '__all__' %}
+				{{ error }}
+			{% else %}
+				'{{ field }}': {{ error }}
+			{% endif %}
+		{% endfor %}
+		{% for message in messages %}
+			{{ message }}
+		{% endfor %}
+
+		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+{% endif %}
 
 <!-- Page Content -->
 {% block content %}
