@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import forms, AuthenticationForm, UserCreationForm
+from django.contrib.auth.forms import forms, AuthenticationForm, UserCreationForm, UserChangeForm
 
 from users.models import User
 
@@ -42,12 +42,36 @@ class UserRegisterForm(UserCreationForm):
             field.widget.attrs['class'] = 'form-control py-4'
 
     def clean(self):
-        cleaned_data = super(self.__class__, self).clean()
+        cleaned_data = super(UserRegisterForm, self).clean()
         fields_str = str(
-                (self.cleaned_data.get('username').lower(),
-                self.cleaned_data.get('email').lower(),
-                self.cleaned_data.get('first_name').lower(),
-                self.cleaned_data.get('last_name').lower()))
+            (self.cleaned_data.get('username').lower(),
+             self.cleaned_data.get('email').lower(),
+             self.cleaned_data.get('first_name').lower(),
+             self.cleaned_data.get('last_name').lower()))
         if 'pupkin' in fields_str:
             raise forms.ValidationError('PUPKIN in da house!!!')
         return cleaned_data
+
+
+class UserProfileForm(UserChangeForm):
+    image = forms.ImageField(widget=forms.FileInput(attrs={'class': 'custom-file-input'}), required=False)
+
+    class Meta():
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'image',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+
+        self.fields['username'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['readonly'] = True
+
+        for field_name, field in self.fields.items():
+            if field_name is not 'image':
+                field.widget.attrs['class'] = 'form-control py-4'
+
+    def clean_image(self):
+        data = self.cleaned_data['image']
+        if data.size > 1024:
+            raise forms.ValidationError('Size of image can not be more then 1 MB')
+        return data
