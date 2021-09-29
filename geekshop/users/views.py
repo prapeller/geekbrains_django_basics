@@ -62,8 +62,11 @@ def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
         if form.is_valid():
+            messages.success(request, 'Success! Profile was changed!')
             form.save()
             return HttpResponseRedirect(reverse('users_app:profile'))
+        else:
+            messages.error(request, 'Form not valid! Read the following error or get back to admin if theres not any.')
 
     context = {
         'title': 'Geekshop - Profile',

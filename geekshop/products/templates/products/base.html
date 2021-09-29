@@ -11,7 +11,7 @@
 	<meta name="description" content="">
 	<meta name="author" content="">
 
-	<title>{{title|title}}</title>
+	<title>{{ title|title }}</title>
 
 	<!-- Bootstrap core CSS -->
 	<link href="{{ STATIC_PREFIX }}vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -59,27 +59,42 @@
 	</div>
 </nav>
 
-{#Messages#}
-{% if form.errors or messages %}
-	<div class="alert {% if messages %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show"
-	     role="alert"
-	     style="margin-top: 50px;">
-		<p><strong>Message!</strong></p>
-		{% for field, error in form.errors.items %}
-			{% if field == '__all__' %}
-				{{ error }}
-			{% else %}
-				'{{ field }}': {{ error }}
-			{% endif %}
-		{% endfor %}
-		{% for message in messages %}
-			{{ message }}
-		{% endfor %}
+{#Messages and Errors#}
 
-		<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-	</div>
+{% if form.errors or messages %}
+
+	{% if messages %}
+		{% for message in messages %}
+
+			<div class="alert {% if message.tags == 'success' %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show"
+			     role="alert" style="margin-top: 50px;">
+				<p><strong>Message!</strong></p>
+				{{ message }}
+
+				<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+
+		{% endfor %}
+	{% endif %}
+
+	{% if form.errors %}
+		<div class="alert alert-danger alert-dismissible fade show" role="alert" style="margin-top: 50px;">
+			<p><strong>Error!</strong></p>
+			{% for field, error in form.errors.items %}
+				{% if field == '__all__' %}
+					{{ error }}
+				{% else %}
+					'{{ field }}': {{ error }}
+				{% endif %}
+			{% endfor %}
+			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	{% endif %}
+
 {% endif %}
 
 <!-- Page Content -->
