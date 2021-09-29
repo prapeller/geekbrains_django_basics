@@ -6,27 +6,6 @@ from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
-@login_required
-def get_total_sum(basket_products):
-    total = 0
-    if basket_products:
-        for basket_product in basket_products:
-            product = basket_product.product
-            price = product.price
-            quantity = basket_product.quantity
-            total += price * quantity
-
-    return total
-
-
-@login_required
-def get_total_quantity(basket_products):
-    total = 0
-    if basket_products:
-        for basket_product in basket_products:
-            total += basket_product.quantity
-
-    return total
 
 
 @login_required

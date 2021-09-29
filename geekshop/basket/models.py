@@ -18,3 +18,17 @@ class Basket(models.Model):
 
     def get_subtotal(self):
         return self.product.price * self.quantity
+
+    @classmethod
+    def get_total_sum(cls, user):
+        total = 0
+        for basket_product in cls.objects.filter(user=user):
+            total += basket_product.get_subtotal()
+        return total
+
+    @classmethod
+    def get_total_quantity(cls, user):
+        total = 0
+        for basket_product in cls.objects.filter(user=user):
+            total += basket_product.quantity
+        return total
