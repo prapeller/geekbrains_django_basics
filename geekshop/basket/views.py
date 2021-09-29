@@ -2,9 +2,11 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponseRedirect
 from products.models import Product
 from basket.models import Basket
+from django.contrib.auth.decorators import login_required
 
 
 # Create your views here.
+@login_required
 def get_total_sum(basket_products):
     total = 0
     if basket_products:
@@ -17,6 +19,7 @@ def get_total_sum(basket_products):
     return total
 
 
+@login_required
 def get_total_quantity(basket_products):
     total = 0
     if basket_products:
@@ -26,6 +29,7 @@ def get_total_quantity(basket_products):
     return total
 
 
+@login_required
 def add_product(request, product_id):
     user = request.user
     product = Product.objects.get(id=product_id)
@@ -41,6 +45,7 @@ def add_product(request, product_id):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
+@login_required
 def remove_product(request, basket_product_id):
     Basket.objects.filter(id=basket_product_id).first().delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
