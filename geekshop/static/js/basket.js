@@ -7,10 +7,8 @@ window.onload = function () {
 }
 
 function clickOnBasketNumbersHandler(e) {
-    // e.preventDefault()
+    e.preventDefault()
     let t = e.target
-    console.log(t.name)
-    console.log(t.value)
 
     $.ajax({
         url: `/basket/edit/${t.name}/${t.value}/`,
