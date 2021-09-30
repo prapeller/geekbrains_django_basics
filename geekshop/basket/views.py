@@ -46,5 +46,6 @@ def edit_qty(request, id, qty):
         context = {
             'basket_products': basket_products
         }
-        result = render_to_string('basket/basket.html', context)
+        result = render_to_string('basket/basket.html', context=context, request=request)
+
         return JsonResponse({'result': result})
