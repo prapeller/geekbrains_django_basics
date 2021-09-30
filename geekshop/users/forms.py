@@ -67,7 +67,7 @@ class UserProfileForm(UserChangeForm):
         self.fields['email'].widget.attrs['readonly'] = True
 
         for field_name, field in self.fields.items():
-            if field_name is not 'image':
+            if field_name != 'image':
                 field.widget.attrs['class'] = 'form-control py-4'
 
     def clean_image(self):
