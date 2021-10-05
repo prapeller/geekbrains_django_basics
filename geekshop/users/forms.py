@@ -39,7 +39,8 @@ class UserRegisterForm(UserCreationForm):
         self.fields['password2'].widget.attrs['placeholder'] = 'Repeate your password'
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control py-4'
+            if field_name != 'image':
+                field.widget.attrs['class'] = 'form-control py-4'
 
     def clean(self):
         cleaned_data = super(UserRegisterForm, self).clean()
@@ -72,6 +73,6 @@ class UserProfileForm(UserChangeForm):
 
     def clean_image(self):
         data = self.cleaned_data['image']
-        if data.size > 1048576:
+        if data and data.size > 1048576:
             raise forms.ValidationError('Size of image can not be more then 1 MB')
         return data

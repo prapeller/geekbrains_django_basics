@@ -1,0 +1,67 @@
+{% extends 'admins/base.html' %}
+
+{% block content %}
+
+	<main>
+		<div class="container-fluid">
+			<h1 class="mt-4">User List</h1>
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+							<thead>
+							<tr>
+								<th>Username</th>
+								<th>First name</th>
+								<th>Last name</th>
+								<th>Email</th>
+								<th>Is Superuser</th>
+								<th>Is Staff</th>
+								<th>Is Active</th>
+							</tr>
+							</thead>
+
+							{% for user in users %}
+								<tr>
+									<td>
+										<a href="{% url 'admins_app:user_update' user.id %}" style="color: dodgerblue">{{ user.username }}</a>
+									</td>
+									<td>{{ user.first_name }}</td>
+									<td>{{ user.last_name }}</td>
+									<td>{{ user.email }}</td>
+
+									{% if user.is_superuser %}
+									<td class="text-center"><i>Y</i></td>
+									{% else %}
+									<td class="text-center"><i>-</i></td>
+									{% endif %}
+
+									{% if user.is_staff %}
+									<td class="text-center"><i>Y</i></td>
+									{% else %}
+									<td class="text-center"><i>-</i></td>
+									{% endif %}
+
+									{% if user.is_active %}
+									<td class="text-center"><i>Y</i></td>
+									{% else %}
+									<td class="text-center"><i>-</i></td>
+									{% endif %}
+
+
+
+								</tr>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+				<div class="card-footer">
+					<a href="{% url 'admins_app:user_create' %}">
+						<button class="btn btn-success">Create User</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</main>
+
+{% endblock %}
