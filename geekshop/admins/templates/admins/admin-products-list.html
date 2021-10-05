@@ -1,0 +1,46 @@
+{% extends 'admins/base.html' %}
+
+{% block content %}
+
+	<main>
+		<div class="container-fluid">
+			<h1 class="mt-4">Product List</h1>
+			<div class="card mb-4">
+				<div class="card-body">
+					<div class="table-responsive">
+						<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+							<thead>
+							<tr>
+								<th>Name</th>
+								<th>Description</th>
+								<th>Price</th>
+								<th>Quantity</th>
+								<th>Category</th>
+							</tr>
+							</thead>
+
+							{% for product in products %}
+								<tr>
+									<td>
+										<a href="{% url 'admins_app:product_update' product.id %}" style="color: dodgerblue">{{ product.name }}</a>
+									</td>
+									<td>{{ product.description }}</td>
+									<td>{{ product.price }}</td>
+									<td>{{ product.quantity }}</td>
+									<td>{{ product.category }}</td>
+
+								</tr>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+				<div class="card-footer">
+					<a href="{% url 'admins_app:product_create' %}">
+						<button class="btn btn-success">Create Product</button>
+					</a>
+				</div>
+			</div>
+		</div>
+	</main>
+
+{% endblock %}

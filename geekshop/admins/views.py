@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
-from django.contrib.admin.views.decorators import staff_member_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
@@ -10,6 +9,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
 from admins.forms import UserAdminRegisterForm
 from geekshop.mixin import IsSuperuserDispatchMixin, IsStuffDispatchMixin
+from products.models import Product
 from users.models import User
 
 
@@ -92,3 +92,43 @@ class MakeStuff(DeleteView, IsSuperuserDispatchMixin):
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
+
+class ProductCreateView(CreateView, IsStuffDispatchMixin):
+    model = Product
+    fields = ('name', 'description', 'price', 'quantity', 'category')
+    template_name = 'admins/admin-products-create.html'
+    success_url = reverse_lazy('admins_app:product_list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductCreateView, self).get_context_data(**kwargs)
+        context['title'] = 'Admin panel | Create Product'
+        return context
+
+
+class ProductListView(ListView, IsStuffDispatchMixin):
+    model = Product
+    template_name = 'admins/admin-products-list.html'
+    context_object_name = 'products'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductListView, self).get_context_data(**kwargs)
+        context['title'] = 'Admin panel | Product list'
+        return context
+
+
+class ProductUpdateView(UpdateView, IsStuffDispatchMixin):
+    model = Product
+    fields = ['name', 'description', 'price', 'quantity', 'category']
+    template_name = 'admins/admin-products-update-delete.html'
+    success_url = reverse_lazy('admins_app:product_list')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ProductUpdateView, self).get_context_data(**kwargs)
+        context['title'] = 'Admin panel | Update Product'
+        return context
+
+
+class ProductDeleteView(DeleteView, IsSuperuserDispatchMixin):
+    model = Product
+    template_name = 'admins/admin-products-list.html'
+    success_url = reverse_lazy('admins_app:product_list')
