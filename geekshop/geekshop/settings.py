@@ -132,14 +132,14 @@ STATICFILES_DIRS = (BASE_DIR / 'media/product_images', BASE_DIR / 'static')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 RUB = moneyed.add_currency(
-    code='RUB',
+    code='₽',
     numeric='643',
     name='Рубль',
     countries=('RUSSIA',)
 )
 
-CURRENCIES = ('USD', 'EUR', 'RUB')
-CURRENCY_CHOICES = [('USD', '$'), ('EUR', '€'), ('RUB', '₽')]
+CURRENCIES = ('₽',)
+CURRENCY_CHOICES = [('USD', '$'), ('EUR', '€'), ('₽', '₽')]
 CURRENCY_CODE_MAX_LENGTH = 3
 
 MEDIA_URL = '/media/'

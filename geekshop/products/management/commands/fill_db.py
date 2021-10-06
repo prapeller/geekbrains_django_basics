@@ -18,7 +18,7 @@ class Command(BaseCommand):
         cur = connection.cursor()
         cur.execute("""
         TRUNCATE products_productcategory CASCADE;
-        TRUNCATE products_product;
+        TRUNCATE products_product CASCADE;
         """)
 
         products = load_from_json('product.json')
