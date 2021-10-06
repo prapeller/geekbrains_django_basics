@@ -1,6 +1,7 @@
 import datetime
 import quopri
 
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from djmoney.money import Money
 
 from django.shortcuts import render
@@ -18,14 +19,23 @@ def index(request):
     return render(request, 'products/index.html', context)
 
 
-def products(request):
+def products(request, category_id=None, page_id=1):
     with open(os.path.join(app_path, 'fixtures/slides.json')) as file:
         slides_paths = json.load(file)
+
+    products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+    paginator = Paginator(products, per_page=3)
+    try:
+        products_paginator = paginator.page(page_id)
+    except PageNotAnInteger:
+        products_paginator = paginator.page(1)
+    except EmptyPage:
+        products_paginator = paginator.page(paginator.num_pages)
 
     context = {
         'title': 'Geekshop - catalog',
         'slides': slides_paths,
-        'products': Product.objects.all(),
+        'products': products_paginator,
         'categories': ProductCategory.objects.all()
     }
 
