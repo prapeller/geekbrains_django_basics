@@ -1,0 +1,28 @@
+<div class="row products-row">
+					{% for product in products %}
+
+						<div class="col-lg-4 col-md-6 mb-4">
+							<div class="card h-100">
+								<a href="#">
+									<img class="card-img-top" src="{{ product.image.url }}" alt={{ product.image }}>
+								</a>
+								<div class="card-body">
+									<h6 class="card-title">
+										<a href="#">{{ product.name }}</a>
+									</h6>
+									<h5>{{ product.price }}</h5>
+									<p class="card-text">{{ product.description }}
+									</p>
+								</div>
+
+								<div class="card-footer text-center">
+									<form id="{{ product.id }}" class="add-to-basket-btn">
+										{% csrf_token %} <input class="btn btn-outline-success" type="submit" value="Add to basket">
+									</form>
+								</div>
+							</div>
+						</div>
+
+					{% endfor %}
+
+				</div>
