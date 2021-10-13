@@ -7,9 +7,6 @@ from basket.models import Basket
 from django.contrib.auth.decorators import login_required
 
 
-# Create your views here.
-
-
 @login_required
 def add_product(request, product_id):
     user = request.user
@@ -46,6 +43,7 @@ def edit_qty(request, id, qty):
         context = {
             'basket_products': basket_products
         }
-        result = render_to_string('basket/basket.html', context=context, request=request)
+        result = render_to_string('basket/basket.html', context=context,
+                                  request=request)
 
         return JsonResponse({'result': result})
