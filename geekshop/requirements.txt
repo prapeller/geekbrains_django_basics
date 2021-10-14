@@ -1,0 +1,20 @@
+asgiref==3.4.1
+astroid @ file:///D:/bld/astroid_1631641731827/work
+Babel==2.9.1
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1602866480661/work
+Django==3.2.7
+django-money==2.0.3
+isort @ file:///home/conda/feedstock_root/build_artifacts/isort_1627548912727/work
+lazy-object-proxy @ file:///D:/bld/lazy-object-proxy_1616507049859/work
+mccabe==0.6.1
+Pillow==8.3.2
+platformdirs @ file:///home/conda/feedstock_root/build_artifacts/platformdirs_1630400214373/work
+psycopg2==2.9.1
+py-moneyed==1.2
+pygame==2.0.1
+python-dotenv==0.19.1
+pytz==2021.1
+sqlparse==0.4.2
+toml @ file:///home/conda/feedstock_root/build_artifacts/toml_1604308577558/work
+typing-extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1622748266870/work
+wrapt @ file:///D:/bld/wrapt_1610095137416/work

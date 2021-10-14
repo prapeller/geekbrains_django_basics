@@ -1,3 +1,6 @@
+import hashlib
+from random import random
+
 from django.contrib.auth.forms import forms, AuthenticationForm, \
     UserCreationForm, UserChangeForm
 
@@ -56,6 +59,15 @@ class UserRegisterForm(UserCreationForm):
             if field_name != 'image':
                 field.widget.attrs['class'] = 'form-control py-4'
 
+    def save(self, commit=True):
+        user = super(UserRegisterForm, self).save()
+        salt = hashlib.sha1(str(random()).encode('utf8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1(
+            (user.email + salt).encode('utf8')).hexdigest()
+        user.is_active = False
+        user.save()
+        return user
+
     def clean(self):
         cleaned_data = super(UserRegisterForm, self).clean()
         fields_str = str(
@@ -76,7 +88,7 @@ class UserProfileForm(UserChangeForm):
         widget=forms.FileInput(attrs={'class': 'custom-file-input'}),
         required=False)
 
-    class Meta():
+    class Meta:
         model = User
         fields = ('username', 'email', 'first_name', 'last_name', 'image',)
 
