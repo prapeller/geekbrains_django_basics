@@ -102,8 +102,8 @@ class Profile(TemplateView, FormMixin, TitleContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super(Profile, self).get_context_data(**kwargs)
-        context['basket_products'] = Basket.objects.filter(
-            user=self.request.user)
+        # context['basket_products'] = Basket.objects.filter(
+        #     user=self.request.user)
         context['form'] = UserProfileForm(instance=self.request.user)
         return context
 
