@@ -1,9 +1,10 @@
-import json
-
 from django.core.management import BaseCommand
 from django.db import connection
+
 from os import path
 from products.models import Product, ProductCategory
+
+import json
 
 JSON_PATH = 'products/fixtures'
 
@@ -32,6 +33,7 @@ class Command(BaseCommand):
         for prod in products:
             product_inst = prod.get('fields')
             product_inst['id'] = prod.get('pk')
-            category_inst = ProductCategory.objects.get(id=product_inst['category'])
+            category_inst = ProductCategory.objects.get(
+                id=product_inst['category'])
             product_inst['category'] = category_inst
             Product.objects.create(**product_inst)

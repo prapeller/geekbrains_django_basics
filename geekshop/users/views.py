@@ -1,7 +1,8 @@
 from os import path
 
 from django.conf import settings
-from django.shortcuts import render, HttpResponseRedirect, redirect
+from django.shortcuts import render, HttpResponseRedirect, redirect, \
+    get_object_or_404
 from django.core.mail import send_mail
 from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -14,7 +15,8 @@ from django.utils.decorators import method_decorator
 from geekshop.mixin import TitleContextMixin
 from geekshop.settings import LOGIN_URL
 from users.models import User
-from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from users.forms import UserLoginForm, UserRegisterForm, UserProfileForm, \
+    UserProfileEditForm
 from basket.models import Basket
 
 
@@ -92,9 +94,9 @@ class Logout(View):
 #     auth.logout(request)
 #     return HttpResponseRedirect(reverse('index'))
 
-@method_decorator(user_passes_test(lambda u: u.is_authenticated),
-                  name='dispatch')
+@method_decorator(user_passes_test(lambda u: u.is_authenticated), name='dispatch')
 class Profile(TemplateView, FormMixin, TitleContextMixin):
+# class Profile(UpdateView, TitleContextMixin):
     title = 'Geekshop - register'
     form_class = UserProfileForm
     template_name = 'users/profile.html'
@@ -102,18 +104,19 @@ class Profile(TemplateView, FormMixin, TitleContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super(Profile, self).get_context_data(**kwargs)
-        # context['basket_products'] = Basket.objects.filter(
-        #     user=self.request.user)
         context['form'] = UserProfileForm(instance=self.request.user)
+        context['profile_form'] = UserProfileEditForm(instance=self.request.user.userprofile)
         return context
 
     def post(self, request, *args, **kwargs):
-        form = UserProfileForm(data=self.request.POST,
-                               instance=self.request.user,
-                               files=self.request.FILES)
-        if form.is_valid():
-            messages.success(self.request, 'Success! Profile was changed!')
+        form = UserProfileForm(data=request.POST,
+                               instance=request.user,
+                               files=request.FILES)
+        form_edit = UserProfileEditForm(data=request.POST,
+                                        instance=request.user.userprofile, )
+        if form.is_valid() and form_edit.is_valid():
             form.save()
+            messages.success(self.request, 'Success! Profile was changed!')
             return redirect(self.success_url)
         else:
             messages.error(self.request,

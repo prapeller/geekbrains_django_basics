@@ -4,7 +4,7 @@ from random import random
 from django.contrib.auth.forms import forms, AuthenticationForm, \
     UserCreationForm, UserChangeForm
 
-from users.models import User
+from users.models import User, UserProfile
 
 
 class UserLoginForm(AuthenticationForm):
@@ -85,12 +85,13 @@ class UserRegisterForm(UserCreationForm):
 
 class UserProfileForm(UserChangeForm):
     image = forms.ImageField(
-        widget=forms.FileInput(attrs={'class': 'custom-file-input'}),
+        widget=forms.FileInput(attrs={'class': 'form-control'}),
         required=False)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'first_name', 'last_name', 'image',)
+        fields = ('image', 'username', 'email', 'first_name', 'last_name',
+                  'age',)
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
@@ -108,3 +109,15 @@ class UserProfileForm(UserChangeForm):
             raise forms.ValidationError(
                 'Size of image can not be more then 1 MB')
         return data
+
+
+class UserProfileEditForm(UserChangeForm):
+    class Meta:
+        model = UserProfile
+        fields = ('tagline', 'about', 'gender',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileEditForm, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
