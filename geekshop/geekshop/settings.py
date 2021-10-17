@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'users',
     'basket',
     'admins',
+    'social_django'
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,12 @@ EMAIL_USE_SSL = True if os.getenv('EMAIL_USE_SSL') == 'True' else False
 
 # EMAIL_HOST_USER, EMAIL_HOST_PASSWORD = None, None
 # python -m smtpd -n -c DebuggingServer localhost:25
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '7977238'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'uT7mWYmp5x0cmMFziael'
+SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.131'
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
+)
