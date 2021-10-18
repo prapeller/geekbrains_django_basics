@@ -34,3 +34,7 @@ class UserProfile(models.Model):
     gender = models.CharField(verbose_name='gender',
                               choices=CHOICES,
                               max_length=1, blank=True, )
+
+    lang = models.CharField(verbose_name='lang',
+                            max_length=10, blank=True, null=True,)
+

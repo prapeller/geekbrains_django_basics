@@ -114,7 +114,7 @@ class UserProfileForm(UserChangeForm):
 class UserProfileEditForm(UserChangeForm):
     class Meta:
         model = UserProfile
-        fields = ('tagline', 'about', 'gender',)
+        fields = ('tagline', 'about', 'gender', 'lang')
 
     def __init__(self, *args, **kwargs):
         super(UserProfileEditForm, self).__init__(*args, **kwargs)

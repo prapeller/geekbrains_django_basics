@@ -25,9 +25,9 @@ load_dotenv(BASE_DIR / '.env')
 SECRET_KEY = 'django-insecure-a=f^zf@z*e8mf7*jq*k^65*@6)!nj-5#gx%nzn@#h#z1mr)jtt'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -133,7 +133,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (BASE_DIR / 'media/product_images', BASE_DIR / 'static')
+STATICFILES_DIRS = (BASE_DIR / 'static',
+                    BASE_DIR / 'media/product_images',
+                    )
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
