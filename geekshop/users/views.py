@@ -96,7 +96,6 @@ class Logout(View):
 
 @method_decorator(user_passes_test(lambda u: u.is_authenticated), name='dispatch')
 class Profile(TemplateView, FormMixin, TitleContextMixin):
-# class Profile(UpdateView, TitleContextMixin):
     title = 'Geekshop - register'
     form_class = UserProfileForm
     template_name = 'users/profile.html'
