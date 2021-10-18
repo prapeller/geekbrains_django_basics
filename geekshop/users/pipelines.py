@@ -24,7 +24,7 @@ def save_user_profile(backend, user, response, *args, **kwargs):
          '/method/users.get',
          None,
          urlencode(
-             OrderedDict(fields=','.join(('bdate', 'sex', 'about', 'lang', 'photo')),
+             OrderedDict(fields=','.join(('bdate', 'sex', 'about', 'lang', 'photo_100')),
                          access_token=response['access_token'],
                          v=5.131)),
          None
@@ -53,11 +53,11 @@ def save_user_profile(backend, user, response, *args, **kwargs):
         language_code = data.get('language')
         user.userprofile.lang = languages.get(language_code)
 
-    if data.get('photo'):
-        vk_photo_url = data.get('photo')
+    if data.get('photo_100'):
+        vk_photo_url = data.get('photo_100')
 
-        res = requests.get(vk_photo_url)
-        img = Image.open(BytesIO(res.content))
+        resp = requests.get(vk_photo_url)
+        img = Image.open(BytesIO(resp.content))
 
         ext = vk_photo_url.split('?size')[-2].split('.')[-1]
         image_url = f'users_image/{user.username}.{ext}'
@@ -65,7 +65,6 @@ def save_user_profile(backend, user, response, *args, **kwargs):
 
         temp_image = open(f'media/{image_url}', 'w')
         img.save(temp_image, 'JPEG')
-
 
     if data.get('bdate'):
         bdate_data = data.get('bdate')
