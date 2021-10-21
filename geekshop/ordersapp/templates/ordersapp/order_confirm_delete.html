@@ -1,0 +1,17 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="category_delete">
+        {% include 'ordersapp/includes/inc_order_summary.html' %}
+
+        <div class="text-center">
+            <div class="h1">Are you sure you want to delete?</div>
+            <form action="{% url 'orders_app:order_delete' object.pk %}" method="post">
+                {% csrf_token %}
+                <input class="btn btn-danger" type="submit" value="Delete">
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

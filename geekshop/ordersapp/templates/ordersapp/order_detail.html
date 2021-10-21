@@ -1,0 +1,24 @@
+{% extends "products/base.html" %}
+{% load static %}
+
+{% block content %}
+    {% include 'ordersapp/includes/inc_order_summary.html' %}
+
+    <div class="basket_list">
+        {% for order_product in object.order_products.select_related %}
+            <div class="basket_record">
+                <img style="height: 150px" src="{{ order_product.product.image.url }}" alt="{{ order_product.product.short_desc }}">
+                <span class="category_name">{{ order_product.product.category.name }}</span>
+                <span class="product_name">{{ order_product.product.name }}</span>
+                <span class="product_price">{{ order_product.product.price }}</span>
+                <span class="product_quantity"> x {{ order_product.quantity }} шт. </span>
+                <span class="product_cost"> = {{ order_product.get_subtotal }} </span>
+            </div>
+        {% endfor %}
+    </div>
+    {% if order.status == 'FM' %}
+        <a class="btn btn-success form-control" href="{% url 'orders_app:order_send_to_process' object.pk %}" role="button">Send to Process</a>
+    {% endif %}
+        <a class="btn btn-danger form-control" href="{% url 'orders_app:order_delete' object.pk %}" role="button">Delete</a>
+
+{% endblock %}
