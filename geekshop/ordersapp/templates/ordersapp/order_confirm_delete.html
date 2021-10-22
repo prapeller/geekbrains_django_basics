@@ -2,7 +2,9 @@
 {% load static %}
 
 {% block content %}
-    <div class="category_delete">
+    <div class="container">
+
+        <a class="btn btn-dark form-control mb-5 mt-5" href="{% url 'orders_app:order_list' %}" role="button">Back</a>
         {% include 'ordersapp/includes/inc_order_summary.html' %}
 
         <div class="text-center">

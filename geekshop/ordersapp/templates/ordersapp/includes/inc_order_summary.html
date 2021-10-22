@@ -1,17 +1,11 @@
 {% if object %}
-   <br>
-   <br>
-   <br>
-    <a class="btn btn-primary form-control" href="{% url 'orders_app:order_list' %}" role="button">Back</a>
-   <br>
-   <br>
 
-   <div class="h6">Order #{{ object.pk }} от {{ object.created|date:"Y-m-d H:i:s" }}, Updated: {{ object.updated|date:"Y-m-d H:i:s" }}</div>
-   <div class="h6">Buyer: {{ user.last_name }} {{ user.first_name }} </div>
-   <div class="h6">Status: {{ object.get_status_display }}</div>
-   <hr>
-   <div class="h6">Total order quantity: <span class="order_total_quantity">{{ object.get_total_quantity }}</span></div>
-   <div class="h6">Total order price: <span class="order_total_cost">{{ object.get_total_price }}</span></div>
+    <div class="h6">{{ order }}</div>
+    <div class="h6">Status: {{ order.get_status_display }}</div>
+    <div class="h6">Buyer: {{ user }} </div>
+    <hr>
+    <div class="h6">Total order quantity: <span class="order_total_quantity">{{ object.get_total_quantity }}</span></div>
+    <div class="h6">Total order price: <span class="order_total_cost">{{ object.get_total_price }}</span></div>
+    <hr>
 
 {% endif %}
-<hr>

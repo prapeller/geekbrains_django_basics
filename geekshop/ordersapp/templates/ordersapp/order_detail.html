@@ -2,6 +2,10 @@
 {% load static %}
 
 {% block content %}
+
+    <div class="container">
+
+    <a class="btn btn-dark form-control mb-5 mt-5" href="{% url 'orders_app:order_list' %}" role="button">Back</a>
     {% include 'ordersapp/includes/inc_order_summary.html' %}
 
     <div class="basket_list">
@@ -17,8 +21,9 @@
         {% endfor %}
     </div>
     {% if order.status == 'FM' %}
-        <a class="btn btn-success form-control" href="{% url 'orders_app:order_send_to_process' object.pk %}" role="button">Send to Process</a>
+        <a class="btn btn-success form-control mt-3" href="{% url 'orders_app:order_send_to_process' object.pk %}" role="button">Purchase</a>
     {% endif %}
-        <a class="btn btn-danger form-control" href="{% url 'orders_app:order_delete' object.pk %}" role="button">Delete</a>
+        <a class="btn btn-danger form-control mt-3" href="{% url 'orders_app:order_delete' object.pk %}" role="button">Delete</a>
+    </div>
 
 {% endblock %}
