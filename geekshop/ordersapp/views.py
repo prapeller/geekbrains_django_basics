@@ -24,16 +24,13 @@ class OrderCreate(CreateView, TitleContextMixin):
     model = Order
     title = 'Geekshop | Create Order'
     fields = []
-    template_name_suffix = '_create'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         ord_products = Basket.objects.filter(user=self.request.user)
         OrdProdFormSet = inlineformset_factory(Order, OrderProduct, form=OrderProductForm,
                                                extra=ord_products.count())
-        formset = OrdProdFormSet()
-        if self.request.POST:
-            formset = OrdProdFormSet(self.request.POST)
+        formset = OrdProdFormSet(self.request.POST or None)
 
         for i, form in enumerate(formset.forms):
             product = ord_products[i].product
@@ -49,35 +46,30 @@ class OrderCreate(CreateView, TitleContextMixin):
 
         return context
 
+    @transaction.atomic
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
-
-        with transaction.atomic():
-            form.instance.user = self.request.user
-            self.object = form.save()
-            if formset.is_valid():
-                formset.instance = self.object
-                formset.save()
-
+        form.instance.user = self.request.user
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+            Basket.objects.filter(user=self.request.user).delete()
         if self.object.get_total_quantity() == 0:
             self.object.delete()
-
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class OrderUpdate(UpdateView, TitleContextMixin):
     model = Order
     title = 'Geekshop | Update Order'
     fields = []
-    template_name_suffix = '_update'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         OrdProdFormSet = inlineformset_factory(Order, OrderProduct, form=OrderProductForm, extra=1)
-        formset = OrdProdFormSet(instance=self.object)
-        if self.request.POST:
-            formset = OrdProdFormSet(self.request.POST, instance=self.object)
+        formset = OrdProdFormSet(self.request.POST or None, instance=self.object)
 
         for form in formset.forms:
             if form.instance.pk:
@@ -86,21 +78,18 @@ class OrderUpdate(UpdateView, TitleContextMixin):
         context['formset'] = formset
         return context
 
+    @transaction.atomic
     def form_valid(self, form):
         context = self.get_context_data()
         formset = context['formset']
-
-        with transaction.atomic():
-            # form.instance.user = self.request.user
-            self.object = form.save()
-            if formset.is_valid():
-                formset.instance = self.object
-                formset.save()
-
+        form.instance.user = self.request.user
+        self.object = form.save()
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
         if self.object.get_total_quantity() == 0:
             self.object.delete()
-
-        return super(OrderUpdate, self).form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class OrderDelete(DeleteView):

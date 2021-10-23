@@ -21,7 +21,7 @@
         {% endfor %}
     </div>
     {% if order.status == 'FM' %}
-        <a class="btn btn-success form-control mt-3" href="{% url 'orders_app:order_send_to_process' object.pk %}" role="button">Purchase</a>
+        <a class="btn btn-success form-control mt-3" href="{% url 'orders_app:order_send_to_process' object.pk %}" role="button">Buy</a>
     {% endif %}
         <a class="btn btn-danger form-control mt-3" href="{% url 'orders_app:order_delete' object.pk %}" role="button">Delete</a>
     </div>

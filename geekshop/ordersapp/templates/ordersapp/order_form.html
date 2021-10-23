@@ -1,0 +1,51 @@
+{% extends "products/base.html" %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container">
+        <a class="btn btn-dark form-control mb-5 mt-5" href="{% url 'orders_app:order_list' %}" role="button">Back</a>
+        {% include 'ordersapp/includes/inc_order_summary.html' %}
+
+        <div class="order_form">
+            <form action="" method="post">{% csrf_token %}
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="mb-5">
+                        {{ form.as_table }}
+                    </div>
+                {% endfor %}
+
+                {#               c вариантом ниже почемуто не валидирует formset, пишет {'missing_management_form': 'ManagementForm data is missing or has been tampered with. Missing fields: %(field_names)s. You may need to file a bug report if the issue persists.'} хотя formset.management_form стоит 💩 #}
+
+{#                                <table class="table">#}
+{#                                    {{ formset.management_form }}#}
+{#                                    {% for form in formset.forms %}#}
+{##}
+{#                                        {% if forloop.first %}#}
+{#                                            <thead>#}
+{#                                            <tr>#}
+{#                                                {% for field in form.visible_fields %}#}
+{#                                                    <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">{{ field.label|capfirst }}</th>#}
+{#                                                {% endfor %}#}
+{#                                            </tr>#}
+{#                                            </thead>#}
+{#                                        {% endif %}#}
+{##}
+{#                                        <tr class="formset_row">#}
+{#                                            {% for field in form.visible_fields %}#}
+{#                                                <td class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">#}
+{#                                                    {{ field }}#}
+{#                                                </td>#}
+{#                                            {% endfor %}#}
+{#                                        </tr>#}
+{##}
+{#                                    {% endfor %}#}
+{#                                </table>#}
+
+                <button type="submit" class="btn form-control btn-success">Save</button>
+            </form>
+        </div>
+
+    </div>
+{% endblock %}

@@ -27,7 +27,7 @@
                             <td>{{ order.get_status_display }}</td>
                             <td>
                                 <a href="{% url 'orders_app:order_detail' order.pk %}">
-                                    Details
+                                    Buy
                                 </a>
                             </td>
                             {% if order.status == 'FM' %}
