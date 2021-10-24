@@ -1,7 +1,10 @@
 from django.db import models
 from django.conf import settings
+from django.db.models.signals import pre_delete, pre_save
+from django.dispatch import receiver
 from django.urls import reverse
 
+from basket.models import Basket
 from products.models import Product
 
 
@@ -56,7 +59,6 @@ class Order(models.Model):
         self.save()
 
 
-
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, verbose_name='order',
                               related_name='order_products',
@@ -67,3 +69,24 @@ class OrderProduct(models.Model):
 
     def get_subtotal(self):
         return self.product.price * self.quantity
+
+    @classmethod
+    def get_quantity(cls, pk):
+        return cls.objects.get(pk=pk).quantity
+
+
+# @receiver(pre_delete, sender=Basket)
+# @receiver(pre_delete, sender=OrderProduct)
+# def product_quantity_update_delete(sender, instance, **kwargs):
+#     instance.product.quantity += instance.quantity
+#     instance.save()
+#
+#
+# @receiver(pre_save, sender=Basket)
+# @receiver(pre_save, sender=OrderProduct)
+# def product_quantity_update_save(sender, instance, **kwargs):
+#     if not instance.pk:
+#         instance.product.quantity -= instance.quantity
+#     else:
+#         instance.product.quantity -= instance.quantity - Basket.get_quantity(instance.pk)
+#     instance.product.save()
