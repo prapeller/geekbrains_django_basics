@@ -1,13 +1,13 @@
 'use strict'
 
-window.onload = function () {
+window.addEventListener("load", function(evt) {
     $('.basket-list').on('click', '.quantity_select', e => {
         clickOnBasketNumbersHandler(e)
     })
     $('.products-row').on('submit', '.add-to-basket-btn', e => {
         clickOnPutToBasketBtnHandler(e)
     })
-}
+})
 
 function clickOnBasketNumbersHandler(e) {
     e.preventDefault()

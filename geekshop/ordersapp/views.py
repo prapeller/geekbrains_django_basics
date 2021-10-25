@@ -9,7 +9,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, \
     DetailView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
-from django.forms import inlineformset_factory, modelformset_factory
+from django.forms import inlineformset_factory, modelformset_factory, formset_factory
 from django.db import transaction
 
 
@@ -89,12 +89,17 @@ class OrderUpdate(UpdateView, TitleContextMixin):
         formset = context['formset']
         form.instance.user = self.request.user
         self.object = form.save()
+        # for num, e in enumerate(formset):
+        #     print(num, e)
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
+        else: print(formset.non_form_errors())
+
         if self.object.get_total_quantity() == 0:
             self.object.delete()
         return HttpResponseRedirect(self.get_success_url())
+
 
 
 class OrderDelete(DeleteView):
