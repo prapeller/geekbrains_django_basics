@@ -1,0 +1,54 @@
+{% extends 'products/base.html' %}
+{% load static %}
+
+
+{% block content %}
+    <div class="container mt-5">
+        <br>
+        <div class="text-center">
+             <h1> Orders of {{ user.first_name|default:'User' }}</h1>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <br>
+                {% for order in object_list %}
+                    {% if order.is_active %}
+                        <tr>
+                            <td class="td1 orders_list">{{ order.pk }}</td>
+                            <td>{{ order.created|date:"Y-m-d H:i:s" }}</td>
+                            <td>{{ order.updated|date:"Y-m-d H:i:s" }}</td>
+                            <td>{{ order.get_status_display }}</td>
+                            <td>
+                                <a href="{% url 'orders_app:order_detail' order.pk %}">
+                                    Buy
+                                </a>
+                            </td>
+                            {% if order.status == 'FM' %}
+                                <td>
+                                    <a href="{% url 'orders_app:order_update' order.pk %}">
+                                        Update
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href="{% url 'orders_app:order_delete' order.pk %}">
+                                        Delete
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+            <a class="btn btn-warning form-control" href="{% url 'orders_app:order_create' %}" role="button">Create Order</a>
+        </div>
+
+    </div>
+{% endblock %}

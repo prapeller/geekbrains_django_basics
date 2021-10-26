@@ -1,0 +1,11 @@
+{% if object %}
+
+    <div class="h6">{{ order }}</div>
+    <div class="h6">Status: {{ order.get_status_display }}</div>
+    <div class="h6">Buyer: {{ user }} </div>
+    <hr>
+    <div class="h6">Total order quantity: <span class="order_total_quantity">{{ object.get_total_quantity }}</span></div>
+    <div class="h6">Total order price: <span class="order_total_cost">{{ object.get_total_price }}</span></div>
+    <hr>
+
+{% endif %}
