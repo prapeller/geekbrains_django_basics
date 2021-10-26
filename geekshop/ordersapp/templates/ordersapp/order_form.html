@@ -8,25 +8,19 @@
         {% include 'ordersapp/includes/inc_order_summary.html' %}
 
         <div class="order_form">
-            <form action="" method="post">{% csrf_token %}
-                {% for form in formset %}
-{#                    <div class="invisible">#}
-                    <div class="">
-{#                        {{ form }}#}
-                    </div>
-                {% endfor %}
-
-                {{ formset.management_form }}
-                {{ order_products.management_form }}
-                {##}
+            <form action="" method="post">
+                {% csrf_token %}
                 <table class="table">
+                    {{ formset.management_form }}
                     {% for form in formset.forms %}
 
                         {% if forloop.first %}
                             <thead>
                             <tr>
                                 {% for field in form.visible_fields %}
-                                    <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">{{ field.label|capfirst }}</th>
+                                    <th class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
+                                        {{ field.label|capfirst }}
+                                    </th>
                                 {% endfor %}
                             </tr>
                             </thead>
@@ -34,19 +28,32 @@
 
                         <tr class="formset_row">
                             {% for field in form.visible_fields %}
-                                <td class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">
-                                    {{ field }}
+                                <td class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
+                                    {% if forloop.first %}
+                                        {% for SOMEHIDDENSHITBECAUSEOFWHICHFORMSETNOTWORKING in form.hidden_fields %}
+                                            {{ SOMEHIDDENSHITBECAUSEOFWHICHFORMSETNOTWORKING }}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {{ field.errors.as_ul }}
+
+                                    {% if field.name == 'price' %}
+                                        {% if not field.value %}
+                                            <span id="id_order_products-{{ forloop.parentloop.counter0 }}-price">0</span>
+                                        {% else %}
+                                            <span id="id_order_products-{{ forloop.parentloop.counter0 }}-price">{{ field.value }} </span>
+                                        {% endif %}
+                                    {% else %}
+                                        {{ field }}
+                                    {% endif %}
+
+
                                 </td>
                             {% endfor %}
                         </tr>
-
                     {% endfor %}
                 </table>
-
-
-                <button type="submit" class="btn form-control btn-success">Save</button>
-
-
+                                <button type="submit" value="Save" class="btn btn-primary form-control mt-3">Update
+                                </button>
             </form>
         </div>
 
