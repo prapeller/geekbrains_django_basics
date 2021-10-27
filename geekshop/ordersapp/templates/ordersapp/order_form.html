@@ -38,7 +38,7 @@
 
                                     {% if field.name == 'price' %}
                                         {% if not field.value %}
-                                            <span id="id_order_products-{{ forloop.parentloop.counter0 }}-price">0</span>
+                                            <span id="id_order_products-{{ forloop.parentloop.counter0 }}-price">0.00</span>
                                         {% else %}
                                             <span id="id_order_products-{{ forloop.parentloop.counter0 }}-price">{{ field.value }} </span>
                                         {% endif %}

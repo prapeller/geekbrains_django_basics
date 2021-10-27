@@ -2,6 +2,7 @@ import datetime
 import quopri
 
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.http import JsonResponse
 from djmoney.money import Money
 
 from django.shortcuts import render
@@ -23,7 +24,8 @@ def products(request, category_id=None, page_id=1):
     with open(os.path.join(app_path, 'fixtures/slides.json')) as file:
         slides_paths = json.load(file)
 
-    products = Product.objects.filter(category_id=category_id) if category_id else Product.objects.all()
+    products = Product.objects.filter(
+        category_id=category_id) if category_id else Product.objects.all()
     paginator = Paginator(products, per_page=3)
     try:
         products_paginator = paginator.page(page_id)
@@ -40,3 +42,8 @@ def products(request, category_id=None, page_id=1):
     }
 
     return render(request, 'products/products.html', context)
+
+
+def get_product_price_json(request, pk):
+    price = Product.objects.get(pk=pk).price or 0
+    return JsonResponse({'price': price})

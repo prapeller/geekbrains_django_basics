@@ -73,7 +73,7 @@ class OrderUpdate(UpdateView, TitleContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        OrdProdFormSet = inlineformset_factory(Order, OrderProduct, form=OrderProductForm, extra=1)
+        OrdProdFormSet = inlineformset_factory(Order, OrderProduct, form=OrderProductForm, extra=0)
         formset = OrdProdFormSet(self.request.POST or None, instance=self.object)
 
         for form in formset.forms:
@@ -99,7 +99,6 @@ class OrderUpdate(UpdateView, TitleContextMixin):
         if self.object.get_total_quantity() == 0:
             self.object.delete()
         return HttpResponseRedirect(self.get_success_url())
-
 
 
 class OrderDelete(DeleteView):
