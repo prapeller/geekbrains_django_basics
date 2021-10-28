@@ -91,9 +91,9 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'geekshop',
         'USER': 'postgres',
-        'PASSWORD': 4189,
-        'HOST': 'localhost',
-        'PORT': '5432'
+        # 'PASSWORD': 4189,
+        # 'HOST': 'localhost',
+        # 'PORT': '5432'
     }
 }
 

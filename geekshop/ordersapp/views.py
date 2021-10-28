@@ -73,7 +73,7 @@ class OrderUpdate(UpdateView, TitleContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        OrdProdFormSet = inlineformset_factory(Order, OrderProduct, form=OrderProductForm, extra=0)
+        OrdProdFormSet = inlineformset_factory(Order, OrderProduct, form=OrderProductForm, extra=1)
         formset = OrdProdFormSet(self.request.POST or None, instance=self.object)
 
         for form in formset.forms:
