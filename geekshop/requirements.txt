@@ -1,9 +1,6 @@
 Django==3.2.7
 django-money==2.0.3
 Pillow==8.3.2
-psycopg2==2.9.1
 psycopg2-binary==2.9.1
 python-dotenv==0.19.1
 social-auth-app-django==5.0.0
-social-auth-core==4.1.0
-sqlparse==0.4.2
