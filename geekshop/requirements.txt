@@ -4,3 +4,5 @@ Pillow==8.3.2
 psycopg2-binary==2.9.1
 python-dotenv==0.19.1
 social-auth-app-django==5.0.0
+django-debug-toolbar==3.2.2
+django-debug-toolbar-template-profiler==2.0.2
