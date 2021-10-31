@@ -17,7 +17,7 @@ def add_product(request, product_id):
         Basket.objects.create(user=user, product=product, quantity=1)
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
-    basket_product = basket_products[0]
+    basket_product = basket_products.first()
     basket_product.quantity += 1
     basket_product.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

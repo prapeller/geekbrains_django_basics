@@ -8,42 +8,52 @@
         {% include 'ordersapp/includes/inc_order_summary.html' %}
 
         <div class="order_form">
-            <form action="" method="post">{% csrf_token %}
-                {{ formset.management_form }}
-                {% for form in formset %}
-                    <div class="mb-5">
-                        {{ form.as_table }}
-                    </div>
-                {% endfor %}
+            <form action="" method="post">
+                {% csrf_token %}
+                <table class="table">
+                    {{ formset.management_form }}
+                    {% for form in formset.forms %}
 
-                {#               c вариантом ниже почемуто не валидирует formset, пишет {'missing_management_form': 'ManagementForm data is missing or has been tampered with. Missing fields: %(field_names)s. You may need to file a bug report if the issue persists.'} хотя formset.management_form стоит 💩 #}
+                        {% if forloop.first %}
+                            <thead>
+                            <tr>
+                                {% for field in form.visible_fields %}
+                                    <th class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
+                                        {{ field.label|capfirst }}
+                                    </th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
+                        {% endif %}
 
-{#                                <table class="table">#}
-{#                                    {{ formset.management_form }}#}
-{#                                    {% for form in formset.forms %}#}
-{##}
-{#                                        {% if forloop.first %}#}
-{#                                            <thead>#}
-{#                                            <tr>#}
-{#                                                {% for field in form.visible_fields %}#}
-{#                                                    <th class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">{{ field.label|capfirst }}</th>#}
-{#                                                {% endfor %}#}
-{#                                            </tr>#}
-{#                                            </thead>#}
-{#                                        {% endif %}#}
-{##}
-{#                                        <tr class="formset_row">#}
-{#                                            {% for field in form.visible_fields %}#}
-{#                                                <td class="{% cycle 'td1' 'td2' 'td3' %} order formset_td">#}
-{#                                                    {{ field }}#}
-{#                                                </td>#}
-{#                                            {% endfor %}#}
-{#                                        </tr>#}
-{##}
-{#                                    {% endfor %}#}
-{#                                </table>#}
+                        <tr class="formset_row">
+                            {% for field in form.visible_fields %}
+                                <td class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
+                                    {% if forloop.first %}
+                                        {% for SOMEHIDDENSHITBECAUSEOFWHICHFORMSETNOTWORKING in form.hidden_fields %}
+                                            {{ SOMEHIDDENSHITBECAUSEOFWHICHFORMSETNOTWORKING }}
+                                        {% endfor %}
+                                    {% endif %}
+                                    {{ field.errors.as_ul }}
 
-                <button type="submit" class="btn form-control btn-success">Save</button>
+                                    {% if field.name == 'price' %}
+                                        {% if not field.value %}
+                                            <span id="id_order_products-{{ forloop.parentloop.counter0 }}-price">0.00</span>
+                                        {% else %}
+                                            <span id="id_order_products-{{ forloop.parentloop.counter0 }}-price">{{ field.value }} </span>
+                                        {% endif %}
+                                    {% else %}
+                                        {{ field }}
+                                    {% endif %}
+
+
+                                </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </table>
+                                <button type="submit" value="Save" class="btn btn-primary form-control mt-3">Update
+                                </button>
             </form>
         </div>
 

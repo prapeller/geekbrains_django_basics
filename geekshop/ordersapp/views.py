@@ -9,7 +9,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DeleteView, \
     DetailView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
-from django.forms import inlineformset_factory, modelformset_factory
+from django.forms import inlineformset_factory, modelformset_factory, formset_factory
 from django.db import transaction
 
 
@@ -27,15 +27,14 @@ class OrderCreate(CreateView, TitleContextMixin):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        ord_products = Basket.objects.filter(user=self.request.user)
+        bskt_products = Basket.objects.filter(user=self.request.user)
         OrdProdFormSet = inlineformset_factory(Order, OrderProduct, form=OrderProductForm,
-                                               extra=ord_products.count())
+                                               extra=bskt_products.count())
         formset = OrdProdFormSet(self.request.POST or None)
 
         for i, form in enumerate(formset.forms):
-            product = ord_products[i].product
-            quantity = Basket.objects.filter(product_id=product.id,
-                                             user_id=self.request.user.id).first().quantity
+            product = bskt_products[i].product
+            quantity = bskt_products[i].quantity
             price = product.price
 
             form.initial['product'] = product
@@ -55,7 +54,13 @@ class OrderCreate(CreateView, TitleContextMixin):
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
+
+            # Deleting user's basket in form validation
+            # Basket.delete_by_user(user=self.request.user)
+
+            # Deleting Basket and returning basket.quantity to Product (with BasketQuerySet manager)
             Basket.objects.filter(user=self.request.user).delete()
+
         if self.object.get_total_quantity() == 0:
             self.object.delete()
         return HttpResponseRedirect(self.get_success_url())
@@ -84,9 +89,13 @@ class OrderUpdate(UpdateView, TitleContextMixin):
         formset = context['formset']
         form.instance.user = self.request.user
         self.object = form.save()
+        # for num, e in enumerate(formset):
+        #     print(num, e)
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
+        else: print(formset.non_form_errors())
+
         if self.object.get_total_quantity() == 0:
             self.object.delete()
         return HttpResponseRedirect(self.get_success_url())
