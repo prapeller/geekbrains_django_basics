@@ -24,8 +24,11 @@ def products(request, category_id=None, page_id=1):
     with open(os.path.join(app_path, 'fixtures/slides.json')) as file:
         slides_paths = json.load(file)
 
-    products = Product.objects.filter(
-        category_id=category_id) if category_id else Product.objects.all()
+    if category_id:
+        products = Product.objects.filter(category_id=category_id).select_related('category')
+    else:
+        products = Product.objects.all().select_related('category')
+
     paginator = Paginator(products, per_page=3)
     try:
         products_paginator = paginator.page(page_id)
