@@ -96,7 +96,7 @@ class Logout(View):
 
 @method_decorator(user_passes_test(lambda u: u.is_authenticated), name='dispatch')
 class Profile(TemplateView, FormMixin, TitleContextMixin):
-    title = 'Geekshop - register'
+    title = 'Geekshop - profile'
     form_class = UserProfileForm
     template_name = 'users/profile.html'
     success_url = reverse_lazy('users_app:profile')
