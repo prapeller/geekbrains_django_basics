@@ -146,16 +146,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-RUB = moneyed.add_currency(
-    code='₽',
-    numeric='643',
-    name='Рубль',
-    countries=('RUSSIA',)
-)
+# RUB = moneyed.add_currency(
+#     code='₽',
+#     numeric='643',
+#     name='Рубль',
+#     countries=('RUSSIA',)
+# )
 
-CURRENCIES = ('₽',)
-CURRENCY_CHOICES = [('USD', '$'), ('EUR', '€'), ('₽', '₽')]
-CURRENCY_CODE_MAX_LENGTH = 3
+# CURRENCIES = ('₽',)
+# CURRENCY_CHOICES = [('USD', '$'), ('EUR', '€'), ('₽', '₽')]
+# CURRENCY_CODE_MAX_LENGTH = 3
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
