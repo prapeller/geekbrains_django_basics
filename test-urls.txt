@@ -1,0 +1,7 @@
+http://194.58.90.189/users/login/ POST username=top&password=4189
+http://194.58.90.189/
+http://194.58.90.189/products/
+http://194.58.90.189/products/category-4/
+http://194.58.90.189/users/profile/
+http://194.58.90.189/create/
+http://194.58.90.189/orders/update/5/
