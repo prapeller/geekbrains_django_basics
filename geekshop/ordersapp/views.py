@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 
@@ -7,8 +8,7 @@ from ordersapp.forms import OrderProductForm
 from ordersapp.models import Order, OrderProduct
 from geekshop.mixin import TitleContextMixin
 
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, \
-    DetailView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from django.urls import reverse_lazy, reverse
 from django.shortcuts import get_object_or_404
 from django.forms import inlineformset_factory, modelformset_factory, formset_factory
@@ -18,6 +18,10 @@ from django.db import transaction
 class OrderList(ListView):
     model = Order
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def get_queryset(self):
         return Order.objects.filter(user=self.request.user, is_active=True)
 
@@ -26,6 +30,10 @@ class OrderCreate(CreateView, TitleContextMixin):
     model = Order
     title = 'Geekshop | Create Order'
     fields = []
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,6 +81,10 @@ class OrderUpdate(UpdateView, TitleContextMixin):
     title = 'Geekshop | Update Order'
     fields = []
 
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         OrdProdFormSet = inlineformset_factory(Order, OrderProduct, form=OrderProductForm, extra=1)
@@ -85,10 +97,6 @@ class OrderUpdate(UpdateView, TitleContextMixin):
         context['formset'] = formset
         return context
 
-    def as_view(cls, **initkwargs):
-        return login_required(super().as_view())
-
-
     @transaction.atomic
     def form_valid(self, form):
         context = self.get_context_data()
@@ -100,7 +108,8 @@ class OrderUpdate(UpdateView, TitleContextMixin):
         if formset.is_valid():
             formset.instance = self.object
             formset.save()
-        else: print(formset.non_form_errors())
+        else:
+            print(formset.non_form_errors())
 
         if self.object.get_total_quantity() == 0:
             self.object.delete()
