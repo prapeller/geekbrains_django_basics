@@ -38,6 +38,10 @@ class Order(models.Model):
     def get_absolute_url(self):
         return reverse('orders_app:order_list')
 
+    def get_totals(self):
+        return ({'total_quantity': self.get_total_quantity(),
+                 'total_price': self.get_total_price()})
+
     def get_total_quantity(self):
         ord_products = self.order_products.select_related()
         return sum(list(map(lambda ord_product: ord_product.quantity, ord_products)))

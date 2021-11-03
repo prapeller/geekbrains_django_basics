@@ -4,6 +4,10 @@
     {% endif %}
     <div class="h6">Buyer: {{ user }} </div>
     <hr>
-    <div class="h6">Total order quantity: <span class="order_total_quantity">{{ object.get_total_quantity }}</span></div>
-    <div class="h6">Total order price: <span class="order_total_cost">{{ object.get_total_price }}</span></div>
+{#    <div class="h6">Total order quantity: <span class="order_total_quantity">{{ object.get_total_quantity }}</span></div>#}
+{#    <div class="h6">Total order price: <span class="order_total_cost">{{ object.get_total_price }}</span></div>#}
+    {% with object.get_totals as totals %}
+    <div class="h6">Total order quantity: <span class="order_total_quantity">{{ totals.total_quantity }}</span></div>
+    <div class="h6">Total order price: <span class="order_total_cost">{{ totals.total_price }}</span></div>
+    {% endwith %}
     <hr>
