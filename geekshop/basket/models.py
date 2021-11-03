@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.functional import cached_property
+
 from users.models import User
 from products.models import Product
 
@@ -13,7 +15,7 @@ class BasketQuerySet(models.QuerySet):
 
 class Basket(models.Model):
     objects = BasketQuerySet.as_manager()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='basket')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
     created_timestamp = models.DateTimeField(auto_now_add=True)
@@ -25,19 +27,15 @@ class Basket(models.Model):
     def get_subtotal(self):
         return self.product.price * self.quantity
 
-    @classmethod
-    def get_total_sum(cls, user):
-        total = 0
-        for basket_product in cls.objects.filter(user=user):
-            total += basket_product.get_subtotal()
-        return total
+    @cached_property
+    def get_cached(self):
+        return self.user.basket.select_related()
 
-    @classmethod
-    def get_total_quantity(cls, user):
-        total = 0
-        for basket_product in cls.objects.filter(user=user):
-            total += basket_product.quantity
-        return total
+    def get_total_sum(self):
+        return sum(basket_product.get_subtotal() for basket_product in self.get_cached)
+
+    def get_total_quantity(self):
+        return sum(basket_product.quantity for basket_product in self.get_cached)
 
     @classmethod
     def get_quantity(cls, pk):
