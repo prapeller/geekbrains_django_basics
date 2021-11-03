@@ -1,4 +1,6 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
 
 from basket.models import Basket
 from ordersapp.forms import OrderProductForm
@@ -82,6 +84,10 @@ class OrderUpdate(UpdateView, TitleContextMixin):
 
         context['formset'] = formset
         return context
+
+    def as_view(cls, **initkwargs):
+        return login_required(super().as_view())
+
 
     @transaction.atomic
     def form_valid(self, form):
