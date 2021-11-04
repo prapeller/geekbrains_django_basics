@@ -37,7 +37,7 @@ def get_cached_queryset(key, model, pk=None):
     else:
         return model.objects.all() if not pk else get_object_or_404(model, pk=pk)
 
-
+# @cache_page(50 * 3)
 def products(request, category_id=None, page_id=1):
     with open(os.path.join(app_path, 'fixtures/slides.json')) as file:
         slides_paths = json.load(file)
@@ -80,7 +80,7 @@ class ProductDetails(DetailView):
         return context
 
 
-@cache_page(50 * 3)
+@cache_page(60 * 3)
 def get_product_price_json(request, pk):
     price = Product.objects.get(pk=pk).price or 0
     # price = get_cached_queryset(key=PRODUCTS, model=Product, pk=pk).price or 0
