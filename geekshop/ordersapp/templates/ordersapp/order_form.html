@@ -1,5 +1,6 @@
 {% extends "products/base.html" %}
 {% load static %}
+{% load cache %}
 
 {% block content %}
 
@@ -29,12 +30,7 @@
                         <tr class="formset_row">
                             {% for field in form.visible_fields %}
                                 <td class="{% cycle 'td1' 'td2' 'td3' 'td4' %} order formset_td">
-                                    {% if forloop.first %}
-                                        {% for SOMEHIDDENSHITBECAUSEOFWHICHFORMSETNOTWORKING in form.hidden_fields %}
-                                            {{ SOMEHIDDENSHITBECAUSEOFWHICHFORMSETNOTWORKING }}
-                                        {% endfor %}
-                                    {% endif %}
-                                    {{ field.errors.as_ul }}
+                                    {% if forloop.first %}{% for hidden_field in form.hidden_fields %}{{ hidden_field }}{% endfor %}{% endif %}{{ field.errors.as_ul }}
 
                                     {% if field.name == 'price' %}
                                         {% if not field.value %}
@@ -42,6 +38,11 @@
                                         {% else %}
                                             <span id="id_order_products-{{ forloop.parentloop.counter0 }}-price">{{ field.value }} </span>
                                         {% endif %}
+
+                                    {% elif field.name == 'product' %}
+                                        {% cache 120 form field.value %}
+                                            {{ field }}
+                                        {% endcache %}
                                     {% else %}
                                         {{ field }}
                                     {% endif %}
@@ -52,8 +53,8 @@
                         </tr>
                     {% endfor %}
                 </table>
-                                <button type="submit" value="Save" class="btn btn-primary form-control mt-3">Update
-                                </button>
+                <button type="submit" value="Save" class="btn btn-primary form-control mt-3">Update
+                </button>
             </form>
         </div>
 

@@ -5,6 +5,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
+from django.views.decorators.cache import cache_page
 from django.views.generic import DetailView
 from djmoney.money import Money
 
@@ -79,7 +80,8 @@ class ProductDetails(DetailView):
         return context
 
 
+@cache_page(50 * 3)
 def get_product_price_json(request, pk):
-    # price = Product.objects.get(pk=pk).price or 0
-    price = get_cached_queryset(key=PRODUCTS, model=Product, pk=pk).price or 0
+    price = Product.objects.get(pk=pk).price or 0
+    # price = get_cached_queryset(key=PRODUCTS, model=Product, pk=pk).price or 0
     return JsonResponse({'price': price})
