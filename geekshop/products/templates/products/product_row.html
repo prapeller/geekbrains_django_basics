@@ -8,7 +8,7 @@
 								</a>
 								<div class="card-body">
 									<h6 class="card-title">
-										<a href="#">{{ product.name }}</a>
+										<a href="{% url 'products_app:product_details' product.pk %}">{{ product.name }}</a>
 									</h6>
 									<h5>{{ product.category.name }}</h5>
 									<h5>{{ product.price }}</h5>
