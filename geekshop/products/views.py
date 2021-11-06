@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
-from django.views.decorators.cache import cache_page
+from django.views.decorators.cache import cache_page, never_cache
 from django.views.generic import DetailView
 from djmoney.money import Money
 
@@ -19,6 +19,7 @@ app_path = pathlib.Path(__file__).resolve().parent
 
 PRODUCTS = 'products'
 CATEGORIES = 'product_categories'
+
 
 def index(request):
     context = {'title': 'Geekshop - main'}
@@ -37,14 +38,16 @@ def get_cached_queryset(key, model, pk=None):
     else:
         return model.objects.all() if not pk else get_object_or_404(model, pk=pk)
 
-# @cache_page(50 * 3)
+
+@cache_page(60 * 3)
 def products(request, category_id=None, page_id=1):
     with open(os.path.join(app_path, 'fixtures/slides.json')) as file:
         slides_paths = json.load(file)
 
     if category_id:
         # products = Product.objects.filter(category_id=category_id).select_related('category')
-        products = get_cached_queryset(PRODUCTS, Product).filter(category_id=category_id).select_related('category')
+        products = get_cached_queryset(PRODUCTS, Product).filter(
+            category_id=category_id).select_related('category')
     else:
         # products = Product.objects.all().select_related('category')
         products = get_cached_queryset(PRODUCTS, Product).select_related('category')
@@ -74,14 +77,17 @@ class ProductDetails(DetailView):
 
     def get_context_data(self, category_id=None, *args, **kwargs):
         context = super().get_context_data()
-        context['product'] = get_cached_queryset(key=PRODUCTS, model=Product, pk=self.kwargs.get('pk'))
+        # context['product'] = Product.objects.get(pk=self.kwargs.get('pk'))
+        context['product'] = get_cached_queryset(key=PRODUCTS, model=Product,
+                                                 pk=self.kwargs.get('pk'))
         # context['categories'] = ProductCategory.objects.all()
         context['categories'] = get_cached_queryset(CATEGORIES, ProductCategory)
         return context
 
 
 @cache_page(60 * 3)
+# @never_cache
 def get_product_price_json(request, pk):
-    price = Product.objects.get(pk=pk).price or 0
-    # price = get_cached_queryset(key=PRODUCTS, model=Product, pk=pk).price or 0
+    # price = Product.objects.get(pk=pk).price or 0
+    price = get_cached_queryset(key=PRODUCTS, model=Product, pk=pk).price or 0
     return JsonResponse({'price': price})
