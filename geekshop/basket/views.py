@@ -27,6 +27,7 @@ def add_product(request, product_id):
 
     # basket_product.quantity = F('quantity') + 1
     # basket_product.save()
+    # basket_product.refresh_from_db()          <- to avoid '+ 1' query if .save() will be called further
 
     # or
 
