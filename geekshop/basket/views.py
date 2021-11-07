@@ -1,3 +1,5 @@
+from django.db import connection
+from django.db.models import F
 from django.shortcuts import HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.http import JsonResponse
@@ -18,8 +20,11 @@ def add_product(request, product_id):
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
     basket_product = basket_products.first()
-    basket_product.quantity += 1
+    # basket_product.quantity += 1
+    basket_product.quantity = F('quantity') + 1
     basket_product.save()
+    for q in list(filter(lambda x: 'UPDATE' in x['sql'], connection.queries)):
+        print(q)
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
