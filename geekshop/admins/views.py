@@ -13,7 +13,17 @@ from products.models import Product, ProductCategory
 from users.models import User
 
 
-# Create your views here.
+def print_queries(queries, type=None):
+    if type:
+        queries = list(filter(lambda x: type in x['sql'], queries))
+        print(f'{type} queries:')
+        for query in queries:
+            print(query)
+    print('all queries:')
+    for query in queries:
+        print(query)
+
+
 @login_required
 def index(request):
     context = {
