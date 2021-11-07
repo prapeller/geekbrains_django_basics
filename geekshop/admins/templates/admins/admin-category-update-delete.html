@@ -1,0 +1,43 @@
+{% extends 'admins/base.html' %}
+
+{% block content %}
+
+	<main>
+		<div class="container-fluid">
+			<h1 class="mt-4">Update Category | {{ category.name }}</h1>
+
+			<div class="card-body">
+				<form action="{% url 'admins_app:category_update' category.pk %}" method="post" enctype="multipart/form-data">
+					{% csrf_token %}
+
+					<div class="input-group-sm mb-3">
+						{% for field in form %}
+							<div class="form-group">
+								<label class="small mb-1" for="{{ field.id_for_label }}">{{ field.name }}</label>
+								<div>{{ field }}</div>
+							</div>
+						{% endfor %}
+					</div>
+
+					<div class="col-lg-12 row" style="margin-top: 33px;">
+						<input class="btn btn-info btn-block" type="submit" value="Update">
+					</div>
+
+				</form>
+
+
+				<form action="{% url 'admins_app:category_delete' category.pk %}" method="post">
+					{% csrf_token %}
+					<div class="col-lg-12 row" style="margin-top: 33px;">
+						<input class="btn btn-danger btn-block" type="submit" value="Delete">
+					</div>
+				</form>
+
+
+			</div>
+		</div>
+	</main>
+
+
+{% endblock %}
+
