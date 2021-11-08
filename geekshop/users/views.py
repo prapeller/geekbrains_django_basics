@@ -24,6 +24,12 @@ class Login(LoginView, TitleContextMixin):
     title = 'Geekshop login'
     form_class = UserLoginForm
     template_name = 'users/login.html'
+    success_url = 'index'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse_lazy(self.success_url))
+        return super().get(request, *args, **kwargs)
 
 
 # def login(request):
