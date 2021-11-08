@@ -10,10 +10,12 @@ REDIRECT_STATUS_CODE = 302
 class TestMainSmokeTest(TestCase):
 
     def setUp(self) -> None:
-        """preinstalled parameters"""
+        """preinstalled ProductCategory and Product instances"""
         category = ProductCategory.objects.create(name='Test')
-        self.prod_1 = Product.objects.create(category=category, name='test_product', price=100)
-        self.prod_2 = Product.objects.create(category=category, name='test_product1', price=10)
+        self.prod_1 = Product.objects.create(category=category, name='test_product', price=100,
+                                             image='product_images/Adidas-hoodie.png')
+        self.prod_2 = Product.objects.create(category=category, name='test_product1', price=10,
+                                             image='product_images/Adidas-hoodie.png')
         self.client = Client()
 
     def test_products_page(self):
@@ -21,10 +23,10 @@ class TestMainSmokeTest(TestCase):
         testing to open page
         /products/
         """
-        resp = self.client.get('/')
+        resp = self.client.get('/products/')
         self.assertEqual(resp.status_code, SUCCESS_STATUS_CODE)
 
-    def test_products_product(self):
+    def test_products_details(self):
         """
         test to open page
         /products/details/<int:pk>
@@ -33,10 +35,10 @@ class TestMainSmokeTest(TestCase):
             resp = self.client.get(f'/products/details/{product.pk}/')
             self.assertEqual(resp.status_code, SUCCESS_STATUS_CODE)
 
-    def test_products_basket(self):
+    def test_users_profile(self):
         """
         test to open page and redirect if not logged in
-        /products/details/<int:pk>
+        /users/profile/
         """
         resp = self.client.get('/users/profile/')
         self.assertEqual(resp.status_code, REDIRECT_STATUS_CODE)
@@ -44,5 +46,3 @@ class TestMainSmokeTest(TestCase):
     def tearDown(self) -> None:
         self.prod_1.delete()
         self.prod_2.delete()
-
-
