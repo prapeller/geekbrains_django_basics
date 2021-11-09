@@ -26,6 +26,11 @@ class Login(LoginView, TitleContextMixin):
     template_name = 'users/login.html'
     success_url = 'index'
 
+    def form_valid(self, form):
+        user=User.objects.get(username=self.request.POST.get('username'))
+        print(user)
+        return super().form_valid(self, form)
+
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse_lazy(self.success_url))

@@ -1,34 +1,38 @@
 [
-{
+  {
     "model": "products.productcategory",
     "pk": 1,
     "fields": {
-        "name": "Clothes",
-        "description": ""
+      "name": "Clothes",
+      "description": "description for clothes",
+      "is_active": true
     }
-},
-{
+  },
+  {
     "model": "products.productcategory",
     "pk": 2,
     "fields": {
-        "name": "New Comings",
-        "description": ""
+      "name": "New Comings",
+      "description": "description for new comings",
+      "is_active": true
     }
-},
-{
+  },
+  {
     "model": "products.productcategory",
     "pk": 3,
     "fields": {
-        "name": "Accessories",
-        "description": ""
+      "name": "Accessories",
+      "description": "description for accessories",
+      "is_active": true
     }
-},
-{
+  },
+  {
     "model": "products.productcategory",
     "pk": 4,
     "fields": {
-        "name": "Shoes",
-        "description": ""
+      "name": "Shoes",
+      "description": "description for shoes",
+      "is_active": true
     }
-}
+  }
 ]
