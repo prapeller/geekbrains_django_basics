@@ -159,8 +159,9 @@ def send_verify_link(user):
     varify_link = f'{site}{verify_path}'
     subject = f'{user.username}, activate your Geekshop account!'
     message = f'To activate your account, please follow this link:\n{varify_link}'
-    return send_mail(subject, message, settings.EMAIL_HOST_USER,
+    send_mail(subject, message, settings.EMAIL_HOST_USER,
                      [user.email], fail_silently=False)
+    return varify_link
 
 
 def verify(request, email: str, activation_key: str):

@@ -3,8 +3,8 @@ from django.test.client import Client
 
 from products.models import ProductCategory, Product
 
-SUCCESS_STATUS_CODE = 200
-REDIRECT_STATUS_CODE = 302
+STATUS_CODE_SUCCESS = 200
+STATUS_CODE_REDIRECT = 302
 
 
 class TestMainSmokeTest(TestCase):
@@ -24,7 +24,7 @@ class TestMainSmokeTest(TestCase):
         /products/
         """
         resp = self.client.get('/products/')
-        self.assertEqual(resp.status_code, SUCCESS_STATUS_CODE)
+        self.assertEqual(resp.status_code, STATUS_CODE_SUCCESS)
 
     def test_products_details(self):
         """
@@ -33,7 +33,7 @@ class TestMainSmokeTest(TestCase):
         """
         for product in Product.objects.all():
             resp = self.client.get(f'/products/details/{product.pk}/')
-            self.assertEqual(resp.status_code, SUCCESS_STATUS_CODE)
+            self.assertEqual(resp.status_code, STATUS_CODE_SUCCESS)
 
     def test_users_profile(self):
         """
@@ -41,7 +41,7 @@ class TestMainSmokeTest(TestCase):
         /users/profile/
         """
         resp = self.client.get('/users/profile/')
-        self.assertEqual(resp.status_code, REDIRECT_STATUS_CODE)
+        self.assertEqual(resp.status_code, STATUS_CODE_REDIRECT)
 
     def tearDown(self) -> None:
         self.prod_1.delete()
