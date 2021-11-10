@@ -24,7 +24,7 @@ def print_queries(queries, type=None):
         print(query)
 
 
-@login_required
+@user_passes_test(lambda u: u is not None and u.is_staff)
 def index(request):
     context = {
         'title': 'GeekShop - Admin',

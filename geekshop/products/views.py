@@ -39,18 +39,17 @@ def get_cached_queryset(key, model, pk=None):
         return model.objects.all() if not pk else get_object_or_404(model, pk=pk)
 
 
-@cache_page(60 * 3)
+# всю вьюху лучше тут не кэшить, иначе после логина шапка не будет меняться
+# @cache_page(60 * 3)
 def products(request, category_id=None, page_id=1):
     with open(os.path.join(app_path, 'fixtures/slides.json')) as file:
         slides_paths = json.load(file)
 
     if category_id:
-        # products = Product.objects.filter(category_id=category_id).select_related('category')
         products = get_cached_queryset(PRODUCTS, Product).filter(
-            category_id=category_id).select_related('category')
+            category_id=category_id).order_by('pk').select_related('category')
     else:
-        # products = Product.objects.all().select_related('category')
-        products = get_cached_queryset(PRODUCTS, Product).select_related('category')
+        products = get_cached_queryset(PRODUCTS, Product).order_by('pk').select_related('category')
 
     paginator = Paginator(products, per_page=3)
     try:
@@ -77,16 +76,14 @@ class ProductDetails(DetailView):
 
     def get_context_data(self, category_id=None, *args, **kwargs):
         context = super().get_context_data()
-        # context['product'] = Product.objects.get(pk=self.kwargs.get('pk'))
         context['product'] = get_cached_queryset(key=PRODUCTS, model=Product,
                                                  pk=self.kwargs.get('pk'))
-        # context['categories'] = ProductCategory.objects.all()
         context['categories'] = get_cached_queryset(CATEGORIES, ProductCategory)
         return context
 
 
-@cache_page(60 * 3)
 # @never_cache
+@cache_page(60 * 3)
 def get_product_price_json(request, pk):
     # price = Product.objects.get(pk=pk).price or 0
     price = get_cached_queryset(key=PRODUCTS, model=Product, pk=pk).price or 0

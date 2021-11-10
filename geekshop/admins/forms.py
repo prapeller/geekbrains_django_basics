@@ -15,7 +15,7 @@ class UserAdminUpdateDeleteForm(UserProfileForm):
 
 class CategoryForm(forms.ModelForm):
     discount = forms.IntegerField(widget=forms.NumberInput(), label='discount', required=False,
-                                  min_value=0, max_value=50)
+                                  min_value=-150, max_value=99)
 
     class Meta:
         model = ProductCategory

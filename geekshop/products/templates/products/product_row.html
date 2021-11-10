@@ -3,7 +3,7 @@
 
 						<div class="col-lg-4 col-md-6 mb-4">
 							<div class="card h-100">
-								<a href="#">
+								<a href="{% url 'products_app:product_details' product.pk %}">
 									<img class="card-img-top" src="{{ product.image.url }}" alt={{ product.image }}>
 								</a>
 								<div class="card-body">

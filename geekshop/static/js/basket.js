@@ -1,6 +1,6 @@
 'use strict'
 
-window.addEventListener("load", function(evt) {
+window.addEventListener("load", function (evt) {
     $('.basket-list').on('click', '.quantity_select', e => {
         clickOnBasketNumbersHandler(e)
     })
@@ -12,24 +12,30 @@ window.addEventListener("load", function(evt) {
 function clickOnBasketNumbersHandler(e) {
     e.preventDefault()
     let t = e.target
+    console.log(t)
 
-    $.ajax({
-        url: `/basket/edit/${t.name}/${t.value}/`,
-        success: data => {
-            $('.basket-list').html(data.result)
-        }
-    })
+    $.ajax(
+        {
+            url: `/basket/edit/${t.id}/${t.value}/`,
+            success: data => {
+                $('.basket-list').html(data.result)
+                $('.basket_total_qty').text(data.basket_total_qty)
+            }
+        })
 }
 
 function clickOnPutToBasketBtnHandler(e) {
     e.preventDefault()
     let id = e.target.id
 
-
     $.ajax(
         {
             type: "POST",
-            url: `/basket/add_product${id}/`,
+            url: `/basket/add_product/${id}/`,
             data: {csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()},
+            success: data => {
+                $('.basket_total_qty').text(data.basket_total_qty)
+            },
         })
+
 }

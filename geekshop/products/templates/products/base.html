@@ -48,8 +48,16 @@
                 {% else %}
 
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i
-                                class="fas fa-user-circle"></i> {{ user.first_name|default:'User' }}</a>
+
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i>
+                            {{ user.first_name|default:'User'}}
+
+                            <i class="fas fa-shopping-basket ml-3"></i>
+                            <div class="badge badge-secondary badge-pill basket_total_qty">{{ basket_products.0.get_total_quantity }}</div>
+                        </a>
+
+                        <div class="sb-nav-link-icon"></div>
 
                         <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                             <a class="dropdown-item" href="{% url 'users_app:profile' %}">Profile</a>
@@ -58,7 +66,7 @@
 
                     </li>
 
-                    {% if user.is_superuser %}
+                    {% if user.is_staff %}
 
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'admins_app:index' %}">

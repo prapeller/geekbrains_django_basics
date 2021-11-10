@@ -33,7 +33,6 @@ class Command(BaseCommand):
         for prod in products:
             product_inst = prod.get('fields')
             product_inst['id'] = prod.get('pk')
-            category_inst = ProductCategory.objects.get(
-                id=product_inst['category'])
+            category_inst = ProductCategory.objects.get(id=product_inst['category'])
             product_inst['category'] = category_inst
             Product.objects.create(**product_inst)

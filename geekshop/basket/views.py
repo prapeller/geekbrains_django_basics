@@ -12,35 +12,50 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def add_product(request, product_id):
     user = request.user
-    product = Product.objects.get(id=product_id)
-    basket_products = Basket.objects.filter(user=user, product=product)
+    products = Product.objects.filter(id=product_id)
+    product = products.first()
 
-    if not basket_products:
-        Basket.objects.create(user=user, product=product, quantity=1)
-        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if request.is_ajax():
 
-    basket_product = basket_products.first()
+        basket_products = Basket.objects.filter(user=request.user, product=product)
+
+        if not basket_products:
+            Basket.objects.create(user=user, product=product, quantity=1)
+
+        else:
+            basket_products.update(quantity=F('quantity') + 1)
+            products.update(quantity=F('quantity') - 1)
+
+        context = {
+            'basket_products': basket_products
+        }
+        basket_total_qty = basket_products.first().get_total_quantity()
+
+        return JsonResponse({'basket_total_qty': basket_total_qty})
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+    # basket_product = basket_products.first()
     # basket_product.quantity += 1
     # basket_product.save()
-
-    # or
-
+#
+#     # or
+#
     # basket_product.quantity = F('quantity') + 1
     # basket_product.save()
-    # basket_product.refresh_from_db()          <- to avoid '+ 1' query if .save() will be called further
+#     # to avoid '+ 1' query if .save() will be called further
+#     basket_product.refresh_from_db()
+#
+#     # or
 
-    # or
-
-    basket_product.update(quantity=F('quantity') + 1)
-
-    for q in list(filter(lambda x: 'UPDATE' in x['sql'], connection.queries)):
-        print(q)
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    # to print sql query:
+    # for q in list(filter(lambda x: 'UPDATE' in x['sql'], connection.queries)):
+    #     print(q)
 
 
 @login_required
-def remove_product(request, basket_product_id):
-    Basket.objects.filter(id=basket_product_id).first().delete()
+def remove_product(request, id):
+    Basket.objects.filter(id=id).first().delete()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -54,11 +69,13 @@ def edit_qty(request, id, qty):
         else:
             basket_product.delete()
 
-        basket_products = Basket.objects.filter(user=request.user)
+        basket_products = Basket.objects.filter(user=request.user).order_by('pk')
+        basket_total_qty = basket_products.first().get_total_quantity()
         context = {
             'basket_products': basket_products
         }
         result = render_to_string('basket/basket.html', context=context,
                                   request=request)
 
-        return JsonResponse({'result': result})
+        return JsonResponse({'result': result,
+                             'basket_total_qty':basket_total_qty})

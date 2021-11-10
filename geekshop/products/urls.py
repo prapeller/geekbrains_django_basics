@@ -17,6 +17,7 @@ urlpatterns = [
 
     path('price/<int:pk>/', get_product_price_json, name='get_product_price'),
 
-    # cache_page(...)(class.as_view()) для CBV работает
-    path('details/<int:pk>/', cache_page(60 * 3)(ProductDetails.as_view()), name='product_details'),
+    # cache_page(...)(class.as_view()) для CBV работает, но тут лучше не применять, количество в наличии должно быть актуально
+    # path('details/<int:pk>/', cache_page(60 * 3)(ProductDetails.as_view()), name='product_details'),
+    path('details/<int:pk>/', ProductDetails.as_view(), name='product_details'),
 ]

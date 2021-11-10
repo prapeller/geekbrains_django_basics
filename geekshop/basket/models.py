@@ -22,7 +22,7 @@ class Basket(models.Model):
     updated_timestamp = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f'Basket for {self.user} | Product {self.product}'
+        return f'user: {self.user} | product: {self.product}'
 
     def get_subtotal(self):
         return self.product.price * self.quantity
@@ -41,20 +41,20 @@ class Basket(models.Model):
     def get_quantity(cls, pk):
         return cls.objects.get(pk=pk).quantity
 
-    @classmethod
-    def delete_by_user(cls, user):
-        cls.objects.filter(user=user).delete()
+    # @classmethod
+    # def delete_by_user(cls, user):
+    #     cls.objects.filter(user=user).delete()
 
     def delete(self, using=None, keep_parents=False):
         self.product.quantity += self.quantity
         self.product.save()
         super().delete()
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         if not self.pk:
             self.product.quantity -= self.quantity
         else:
             self.product.quantity -= self.quantity - Basket.get_quantity(self.pk)
         self.product.save()
         super().save()
+
