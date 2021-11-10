@@ -24,6 +24,12 @@ class Login(LoginView, TitleContextMixin):
     title = 'Geekshop login'
     form_class = UserLoginForm
     template_name = 'users/login.html'
+    success_url = 'index'
+
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse_lazy(self.success_url))
+        return super().get(request, *args, **kwargs)
 
 
 # def login(request):
@@ -153,8 +159,9 @@ def send_verify_link(user):
     varify_link = f'{site}{verify_path}'
     subject = f'{user.username}, activate your Geekshop account!'
     message = f'To activate your account, please follow this link:\n{varify_link}'
-    return send_mail(subject, message, settings.EMAIL_HOST_USER,
+    send_mail(subject, message, settings.EMAIL_HOST_USER,
                      [user.email], fail_silently=False)
+    return varify_link
 
 
 def verify(request, email: str, activation_key: str):

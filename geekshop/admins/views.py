@@ -1,17 +1,29 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.db import connection
+from django.db.models import F
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 
-from admins.forms import UserAdminRegisterForm
+from admins.forms import UserAdminRegisterForm, CategoryForm
 from geekshop.mixin import IsSuperuserDispatchMixin, IsStuffDispatchMixin
-from products.models import Product
+from products.models import Product, ProductCategory
 from users.models import User
 
 
-# Create your views here.
+def print_queries(queries, type=None):
+    if type:
+        queries = list(filter(lambda x: type in x['sql'], queries))
+        print(f'{type} queries:')
+        for query in queries:
+            print(query)
+    print('all queries:')
+    for query in queries:
+        print(query)
+
+
 @login_required
 def index(request):
     context = {
@@ -117,7 +129,7 @@ class ProductListView(ListView, IsStuffDispatchMixin):
 
 class ProductUpdateView(UpdateView, IsStuffDispatchMixin):
     model = Product
-    fields = ['name', 'description', 'price', 'quantity', 'category']
+    fields = ['name', 'description', 'price', 'quantity', 'category', 'is_active']
     template_name = 'admins/admin-products-update-delete.html'
     success_url = reverse_lazy('admins_app:product_list')
 
@@ -131,3 +143,45 @@ class ProductDeleteView(DeleteView, IsSuperuserDispatchMixin):
     model = Product
     template_name = 'admins/admin-products-list.html'
     success_url = reverse_lazy('admins_app:product_list')
+
+
+class CategoryCreate(CreateView, IsStuffDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-category-create.html'
+
+
+class CategoryList(ListView, IsStuffDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-category-list.html'
+    context_object_name = 'categories'
+
+
+class CategoryUpdate(UpdateView, IsStuffDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-category-update-delete.html'
+    context_object_name = 'category'
+    form_class = CategoryForm
+
+    def form_valid(self, form):
+        discount = form.cleaned_data.get('discount')
+        if discount:
+            print(f'proceed discount {discount} to cateogory {self.object.name}')
+            self.object.product_set.update(price=F('price') * (1 - discount / 100))
+            # db_profile_by_type(self.__class__, 'UPDATE', connection.queries)
+        is_active = form.cleaned_data.get('is_active')
+        self.object.product_set.update(
+            is_active=True) if is_active else self.object.product_set.update(is_active=False)
+
+        return super().form_valid(form)
+
+
+class CategoryDelete(DeleteView, IsSuperuserDispatchMixin):
+    model = ProductCategory
+    template_name = 'admins/admin-category-update-delete.html'
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.product_set.update(is_active=False)
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(reverse('admins_app:category_list'))

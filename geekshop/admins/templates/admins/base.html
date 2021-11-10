@@ -44,7 +44,7 @@
 		<nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
 			<div class="sb-sidenav-menu">
 				<div class="nav">
-					<div class="sb-sidenav-menu-heading">categories</div>
+					<div class="sb-sidenav-menu-heading">applications</div>
 					<a class="nav-link" href="{% url 'admins_app:user_list' %}">
 						<div class="sb-nav-link-icon">
 							<i class="fas fa-users"></i>
@@ -56,6 +56,13 @@
 							<i class="fas fa-tshirt"></i>
 						</div>
 						Products
+					</a>
+                    <a class="nav-link" href="{% url 'admins_app:category_list' %}">
+{#                    <a class="nav-link" href="#">#}
+						<div class="sb-nav-link-icon">
+							<i class="fas fa-shopping-basket"></i>
+						</div>
+						Categories
 					</a>
 				</div>
 			</div>
