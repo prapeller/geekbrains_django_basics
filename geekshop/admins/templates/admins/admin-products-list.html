@@ -29,7 +29,11 @@
 									<td>{{ product.price }}</td>
 									<td>{{ product.quantity }}</td>
 									<td>{{ product.category }}</td>
-									<td>{{ product.is_active }}</td>
+									{% if product.is_active %}
+									<td class="text-center"><i>Y</i></td>
+									{% else %}
+									<td class="text-center"><i>-</i></td>
+									{% endif %}
 
 								</tr>
 							{% endfor %}

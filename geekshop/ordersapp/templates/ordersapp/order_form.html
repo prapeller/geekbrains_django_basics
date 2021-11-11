@@ -5,7 +5,7 @@
 {% block content %}
 
     <div class="container">
-        <a class="btn btn-dark form-control mb-5 mt-5" href="{% url 'orders_app:order_list' %}" role="button">Back</a>
+        <a class="btn btn-dark form-control mb-5 mt-5" href="{% url 'orders_app:order_list' %}" role="button">to Orders List</a>
         {% include 'ordersapp/includes/inc_order_summary.html' %}
 
         <div class="order_form">
@@ -53,10 +53,13 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <button type="submit" value="Save" class="btn btn-primary form-control mt-3">Update
+                <button type="submit" value="Save" class="btn btn-primary form-control mt-3">Ok
                 </button>
             </form>
         </div>
 
     </div>
+
+    <script src="{{ STATIC_PREFIX }}js/orders_scripts.js" defer></script>
+
 {% endblock %}

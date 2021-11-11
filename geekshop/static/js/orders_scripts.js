@@ -4,6 +4,8 @@ let order_total_quantity_el = $('.order_total_quantity')[0]
 let order_total_price_el = $('.order_total_cost')[0]
 
 $(window).on('load', e => {
+    update()
+
     $('.formset_row').formset({
         prefix: 'formset',
         removed: update,
@@ -37,10 +39,10 @@ function update() {
             $.ajax({
                 url: `/products/price/${id}/`,
                 success: data => {
-                    let price_input = form_el.getElementsByClassName('td3')[0].children[0]
                     total_price = total_price + (qty * data.price)
-                    price_input.innerText = data.price
-                    order_total_price_el.textContent = total_price.toFixed(2)
+                    let price_el = form_el.getElementsByClassName('td3')[0].children[0]
+                    price_el.innerText = `₽${data.price}`
+                    order_total_price_el.textContent = `₽${total_price.toFixed(2)}`
                 }
             })
         }

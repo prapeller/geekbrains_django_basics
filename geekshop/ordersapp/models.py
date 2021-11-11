@@ -64,11 +64,9 @@ class Order(models.Model):
 
 
 class OrderProduct(models.Model):
-    order = models.ForeignKey(Order, verbose_name='order',
-                              related_name='order_products',
+    order = models.ForeignKey(Order, verbose_name='order', related_name='order_products',
                               on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, verbose_name='product',
-                                on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, verbose_name='product', on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(verbose_name='quantity', default=0)
 
     def get_subtotal(self):
@@ -77,7 +75,6 @@ class OrderProduct(models.Model):
     @classmethod
     def get_quantity(cls, pk):
         return cls.objects.get(pk=pk).quantity
-
 
 # @receiver(pre_delete, sender=Basket)
 # @receiver(pre_delete, sender=OrderProduct)

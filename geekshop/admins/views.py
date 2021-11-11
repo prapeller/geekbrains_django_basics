@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.db import connection
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
@@ -71,13 +71,6 @@ class UserUpdateView(UpdateView, IsStuffDispatchMixin):
         return context
 
 
-# @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
-class UserDeleteView(DeleteView, IsSuperuserDispatchMixin):
-    model = User
-    template_name = 'admins/admin-users-list.html'
-    success_url = reverse_lazy('admins_app:user_list')
-
-
 # @method_decorator(user_passes_test(lambda u: u.is_staff), name='dispatch')
 class ActDeact(DeleteView, IsStuffDispatchMixin):
     model = User
@@ -85,21 +78,30 @@ class ActDeact(DeleteView, IsStuffDispatchMixin):
     success_url = reverse_lazy('admins_app:user_list')
 
     def delete(self, request, *args, **kwargs):
+        user = request.user
         self.object = self.get_object()
-        self.object.is_active = False if self.object.is_active else True
+        # super can deact staff and users (!supers)
+        if user.is_superuser:
+            self.object.is_active = False if (self.object.is_active and not self.object.is_superuser) else True
+        # staff can deact only users (!supers & !staff)
+        elif user.is_staff:
+            self.object.is_active = False if (self.object.is_active and not self.object.is_superuser and not self.object.is_staff) else True
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
 # @method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
-class MakeStuff(DeleteView, IsSuperuserDispatchMixin):
+class StuffUnstuff(DeleteView, IsSuperuserDispatchMixin):
     model = User
     template_name = 'admins/admin-users-list.html'
     success_url = reverse_lazy('admins_app:user_list')
 
     def delete(self, request, *args, **kwargs):
+        user = request.user
         self.object = self.get_object()
-        self.object.is_staff = False if self.object.is_staff and not self.object.is_superuser else True
+        # only supers can stuff/unstaff users, supers cant be unstaffed
+        if user.is_superuser:
+            self.object.is_staff = False if self.object.is_staff and not self.object.is_superuser else True
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
 

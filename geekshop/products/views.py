@@ -83,8 +83,8 @@ class ProductDetails(DetailView):
 
 
 # @never_cache
-@cache_page(60 * 3)
+# @cache_page(60 * 3)
 def get_product_price_json(request, pk):
-    # price = Product.objects.get(pk=pk).price or 0
-    price = get_cached_queryset(key=PRODUCTS, model=Product, pk=pk).price or 0
+    product = get_cached_queryset(key=PRODUCTS, model=Product, pk=pk)
+    price = str(product.price).lstrip('₽').replace(',', '')
     return JsonResponse({'price': price})

@@ -16,7 +16,7 @@
                     <th>Status</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tuyody>
                 <br>
                 {% for order in object_list %}
                     {% if order.is_active %}
@@ -25,29 +25,16 @@
                             <td>{{ order.created|date:"Y-m-d H:i:s" }}</td>
                             <td>{{ order.updated|date:"Y-m-d H:i:s" }}</td>
                             <td>{{ order.get_status_display }}</td>
-                            <td>
-                                <a href="{% url 'orders_app:order_detail' order.pk %}">
-                                    Buy
-                                </a>
-                            </td>
+                            <td><a href="{% url 'orders_app:order_detail' order.pk %}">Details</a></td>
                             {% if order.status == 'FM' %}
-                                <td>
-                                    <a href="{% url 'orders_app:order_update' order.pk %}">
-                                        Update
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="{% url 'orders_app:order_delete' order.pk %}">
-                                        Delete
-                                    </a>
-                                </td>
+                                <td><a href="{% url 'orders_app:order_update' order.pk %}">Update</a></td>
+                                <td><a href="{% url 'orders_app:order_delete' order.pk %}">Delete</a></td>
                             {% endif %}
                         </tr>
                     {% endif %}
                 {% endfor %}
-                </tbody>
+                </tuyody>
             </table>
-            <a class="btn btn-warning form-control" href="{% url 'orders_app:order_create' %}" role="button">Create Order</a>
         </div>
 
     </div>

@@ -1,18 +1,20 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.db.models import F, Q
+from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.decorators import method_decorator
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.urls import reverse_lazy, reverse
+from django.shortcuts import get_object_or_404
+from django.forms import inlineformset_factory, modelformset_factory, formset_factory
+from django.db import transaction
 
 from basket.models import Basket
 from ordersapp.forms import OrderProductForm
 from ordersapp.models import Order, OrderProduct
 from geekshop.mixin import TitleContextMixin
 
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
-from django.urls import reverse_lazy, reverse
-from django.shortcuts import get_object_or_404
-from django.forms import inlineformset_factory, modelformset_factory, formset_factory
-from django.db import transaction
+from products.models import Product
 
 
 class OrderList(ListView):
@@ -128,6 +130,14 @@ class OrderDetail(DetailView, TitleContextMixin):
 
 def order_send_to_process(request, pk):
     order = get_object_or_404(Order, pk=pk)
+
+    order_products = order.order_products.select_related()
+    products = Product.objects.filter(id__in=list(map(lambda x: x.product_id, order_products)))
+
+    for product in products:
+        product.quantity -= order_products.filter(product_id=product.id).first().quantity
+        product.save()
+
     order.status = Order.SENT_TO_PROCESSING
     order.save()
     return HttpResponseRedirect(reverse('orders_app:order_list'))
